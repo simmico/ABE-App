@@ -1,0 +1,37 @@
+# Keep founder-hub as its own standalone Git repo for Cloudflare Pages (simmico/ABE)
+founder-hub/
+
+# Environment & Secrets
+.env
+.env.*
+*.jks
+*.keystore
+*.p12
+*.mobileprovision
+*service-account*.json
+firebase-debug.log
+firestore-debug.log
+ui-debug.log
+.firebase/
+
+# Flutter / Dart / Web Build Artifacts
+**/.dart_tool/
+**/build/
+**/.flutter-plugins
+**/.flutter-plugins-dependencies
+**/ios/Flutter/ephemeral/
+**/macos/Flutter/ephemeral/
+**/linux/flutter/ephemeral/
+**/windows/flutter/ephemeral/
+**/coverage/
+
+# Node / Functions
+**/node_modules/
+
+# OS & Editor
+.DS_Store
+Thumbs.db
+*.iml
+*.ipr
+*.iws
+.idea/
