@@ -17,12 +17,16 @@ class DiscoveryFeedScreen extends StatefulWidget {
     this.initialCityFilter = 'ALL',
     this.seedItems,
     this.onOpenAuthOrSwitchRole,
+    this.onSelectContract,
+    this.onOpenTechPortfolioUpload,
   });
 
   /// Initial city filter: `'ALL'`, `'CPT'`, or `'JHB'`.
   final String initialCityFilter;
   final List<VisualContractItem>? seedItems;
   final VoidCallback? onOpenAuthOrSwitchRole;
+  final void Function(VisualContractItem item)? onSelectContract;
+  final VoidCallback? onOpenTechPortfolioUpload;
 
   /// Realistic Cape Town (`CPT`) and Johannesburg (`JHB`) Visual Contract seed data.
   static List<VisualContractItem> buildDefaultSeedCatalog() {
@@ -269,6 +273,27 @@ class _DiscoveryFeedScreenState extends State<DiscoveryFeedScreen> {
       appBar: AppBar(
         title: const Text(BrandConfig.appName),
         actions: <Widget>[
+          if (widget.onOpenTechPortfolioUpload != null)
+            Padding(
+              padding: const EdgeInsets.only(right: 4),
+              child: TextButton.icon(
+                key: const Key('feed_open_tech_upload_button'),
+                onPressed: widget.onOpenTechPortfolioUpload,
+                icon: const Icon(
+                  Icons.add_a_photo_outlined,
+                  size: 18,
+                  color: BrandConfig.roseDark,
+                ),
+                label: const Text(
+                  'Upload Set',
+                  style: TextStyle(
+                    fontFamily: BrandConfig.bodyFontFamily,
+                    fontWeight: FontWeight.w700,
+                    color: BrandConfig.roseDark,
+                  ),
+                ),
+              ),
+            ),
           if (widget.onOpenAuthOrSwitchRole != null)
             Padding(
               padding: const EdgeInsets.only(right: 12),
@@ -341,7 +366,13 @@ class _DiscoveryFeedScreenState extends State<DiscoveryFeedScreen> {
                       return VisualContractCard(
                         key: Key('feed_card_${contract.id}'),
                         item: contract,
-                        onTap: () => _showContractPreviewModal(contract),
+                        onTap: () {
+                          if (widget.onSelectContract != null) {
+                            widget.onSelectContract!(contract);
+                          } else {
+                            _showContractPreviewModal(contract);
+                          }
+                        },
                       );
                     },
                     childCount: items.length,
@@ -509,7 +540,8 @@ class _FilterPill extends StatelessWidget {
         onTap: onTap,
         borderRadius: BorderRadius.circular(BrandConfig.pillRadius),
         child: Container(
-          constraints: const BoxConstraints(minHeight: 40),
+          constraints: const BoxConstraints(minWidth: 48, minHeight: 48),
+          alignment: Alignment.center,
           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
           decoration: BoxDecoration(
             color: isSelected

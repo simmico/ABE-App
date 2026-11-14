@@ -5,10 +5,10 @@
 ---
 
 ## 1. Current Overall Build Status
-- **Active Stage:** Stage 1 Completed (Ready for Stage 2: `chats/CHAT_2_BOOKING_AND_PORTFOLIO.md`)
-- **Active Chat File:** `chats/CHAT_1_FOUNDATION.md` (All Stage 1 sub-tasks `1.1` to `5.3` completed)
-- **Next Sub-Task to Execute:** `Sub-task 6.1` in `chats/CHAT_2_BOOKING_AND_PORTFOLIO.md`
-- **Completed Roadmap Items (Rio's Track):** `Item 1`, `Item 2`, `Item 3`, `Item 4`, `Item 5` (`5 / 18` completed)
+- **Active Stage:** Stage 2 Completed (Ready for Stage 3: `chats/CHAT_3_CALENDAR_AND_VENUE.md`)
+- **Active Chat File:** `chats/CHAT_2_BOOKING.md` (All Stage 2 sub-tasks `6.1` to `8.3` completed)
+- **Next Sub-Task to Execute:** `Sub-task 9.1` in `chats/CHAT_3_CALENDAR_AND_VENUE.md`
+- **Completed Roadmap Items (Rio's Track):** `Item 1`, `Item 2`, `Item 3`, `Item 4`, `Item 5`, `Item 6`, `Item 7`, `Item 8` (`8 / 18` completed)
 
 ---
 
@@ -48,9 +48,9 @@ All agents working in this workspace have direct access to these installed local
 - [x] **Item 3:** Auth Screens & Role Onboarding (`WelcomeAuthScreen`, `RoleCityOnboardingScreen` for `CPT` and `JHB`)
 - [x] **Item 4:** Signature Visual Contract Card UI (`VisualContractCard` + widget tests)
 - [x] **Item 5:** Visual Contract Discovery Feed (`DiscoveryFeedScreen` with `CPT`/`JHB`, Tier Badge, and Price Range filters + `DiscoveryFeedSkeletonCard`)
-- [ ] **Item 6:** Booking Screen & Dynamic Modifier Calculator
-- [ ] **Item 7:** Tech Portfolio Upload Flow
-- [ ] **Item 8:** Stage 1 & 2 Prototype Review Refinements
+- [x] **Item 6:** Booking Screen & Dynamic Modifier Calculator (`BookingModifier`, `BookingPriceQuote`, `BookingCalculatorService`, `VisualContractDetailScreen`)
+- [x] **Item 7:** Tech Portfolio Upload Flow (`TechPortfolioUploadScreen`, `VisualContractRepository`)
+- [x] **Item 8:** Stage 1 & 2 Prototype Review Refinements (`AbeApp` unified prototype navigation, `abe-design-agent` & `flutter_a11y_agent` audit refinements)
 - [ ] **Item 9:** Tech Availability Calendar & Slot Engine
 - [ ] **Item 10:** Strict Venue-Only Booking Lock (Zero House Calls)
 - [ ] **Item 11:** Grading & Tier Badge Engine

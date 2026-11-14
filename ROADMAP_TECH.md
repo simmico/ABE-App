@@ -63,7 +63,7 @@
 ### Item 6: Booking Detail Screen and Dynamic Modifiers
 > [!IMPORTANT]
 > **RIO'S FOCUS (JHB):**
-> - [ ] **Build the Booking & Modifier Engine:** Create the Visual Contract booking screen where clients toggle optional add-ons defined by Aqeelah (*Soak-Off / Removal*, *Extra Length*, *Nail Repair*), dynamically recalculating total price and duration.
+> - [x] **Build the Booking & Modifier Engine:** Create the Visual Contract booking screen where clients toggle optional add-ons defined by Aqeelah (*Soak-Off / Removal*, *Extra Length*, *Nail Repair*), dynamically recalculating total price and duration.
 
 * **Aqeelah's Focus (CPT):**
   - [ ] Finalise the standard list of add-on modifiers and fair time additions based on her CPT market research. *(Growth: Decision-Making & Ownership)*
@@ -73,7 +73,7 @@
 ### Item 7: Tech Portfolio Upload Flow
 > [!IMPORTANT]
 > **RIO'S FOCUS (JHB):**
-> - [ ] **Build the Tech Portfolio Upload Screen:** Build the flow for nail techs to upload a nail photo, set the fixed price and duration, and attach optional add-on toggles.
+> - [x] **Build the Tech Portfolio Upload Screen:** Build the flow for nail techs to upload a nail photo, set the fixed price and duration, and attach optional add-on toggles.
 
 * **Aqeelah's Focus (CPT):**
   - [ ] Set up the official ABE Instagram and TikTok accounts, write the 3-line bio, and plan the "Founding Techs" story highlight. *(Growth: Taking Pride in Your Brand)*
@@ -83,7 +83,7 @@
 ### Item 8: Prototype Walkthrough and UI Refinement
 > [!IMPORTANT]
 > **RIO'S FOCUS (JHB):**
-> - [ ] **Demo Prototype & Refine UI:** Walk Aqeelah through the clickable Stage 1 and 2 app screens and refine the layout and copy based on her feedback.
+> - [x] **Demo Prototype & Refine UI:** Walk Aqeelah through the clickable Stage 1 and 2 app screens and refine the layout and copy based on her feedback.
 
 * **Aqeelah's Focus (CPT):**
   - [ ] Test the first clickable prototype and provide honest feedback from a client and nail tech perspective. *(Growth: Leadership Feedback)*
