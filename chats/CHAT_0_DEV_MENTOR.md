@@ -7,8 +7,8 @@
 ---
 
 ## Current Checkpoint
-- **Active Step:** `Step 0.3` & `Step 0.4` (Connect Google Jules `jules.google.com` to `simmico/ABE-App` with a starter task, and review the Specialist Agents workflow for Chats 1 to 5).
-- **Last Completed Step:** `Step 0.2` (Initialised root Git repository with `.gitignore`, linked remote `https://github.com/simmico/ABE-App.git`, and pushed `main` and `dev` branches).
+- **Active Step:** `CHAT 0 COMPLETE` (All 4 steps completed. Next: Open Chat 1 and run `Read chats/CHAT_1_FOUNDATION.md and execute from the current checkpoint.`).
+- **Last Completed Step:** `Step 0.3` & `Step 0.4` (Explained Google Jules workflow + specialist agents for Chats 1 to 5; Jules connection deferred until Rio's new Google One account is active).
 
 ---
 
@@ -25,9 +25,9 @@
   - Guide Rio through installing or configuring any missing tool cleanly.
 - [x] **Step 0.2: Main App Git Repository & Branch Strategy**
   - Help Rio set up the Git structure for the main app (separate from or alongside `founder-hub`) with a clean `main` branch and `dev` branch so **Google Jules** can open Pull Requests cleanly.
-- [ ] **Step 0.3: Connecting Google Jules (`jules.google.com`)**
+- [x] **Step 0.3: Connecting Google Jules (`jules.google.com`)**
   - Walk Rio through connecting Google Jules to his GitHub repository, showing him how Jules automatically reads `AGENTS.md` and `DEV_STATE.md`, and generating his first test GitHub Issue using `.agents/skills/abe-jules-delegation/SKILL.md`.
-- [ ] **Step 0.4: How to Use Specialist Agents in Chats 1 to 5**
+- [x] **Step 0.4: How to Use Specialist Agents in Chats 1 to 5**
   - Explain to Rio how each stage chat (`CHAT_1` to `CHAT_5`) automatically spawns:
     1. `abe-design-agent` (for luxury, non-AI UI),
     2. `abe-security-agent` / `firestore-rules-author` (for wallet, PIN, and venue-only security), and
@@ -36,5 +36,5 @@
 ---
 
 ## Completed Files & Architecture Log
-- `chats/CHAT_0_DEV_MENTOR.md`: Completed Step 0.1 toolchain installation (`Flutter 3.50.0`, `Dart 3.14.0`, `Firebase CLI 15.36.0`, `Git 2.56.0`, `Node v22.14.0`) and Step 0.2 Git repository setup (`main` and `dev` pushed to `https://github.com/simmico/ABE-App.git`).
+- `chats/CHAT_0_DEV_MENTOR.md`: Completed Steps 0.1 to 0.4 (`Flutter 3.50.0`, `Dart 3.14.0`, `Firebase CLI 15.36.0`, `Git 2.56.0`, `Node v22.14.0`, `simmico/ABE-App` `main`/`dev` branches, and Jules/Specialist Agent onboarding).
 - `.gitignore`: Created root `.gitignore` excluding `founder-hub/` (preserving its separate Cloudflare Pages repo), Flutter build artefacts, and secret `.env` files.
