@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en-ZA">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Aqeelah's Beauty Empire (ABE) | Visual Contract Nail Bookings in CPT &amp; JHB</title>
+  <meta
+    name="description"
+    content="Book the exact nail look you love with upfront ZAR pricing, exact duration, verified Cape Town and Johannesburg commercial venues, and zero house calls."
+  />
+  <meta property="og:title" content="Aqeelah's Beauty Empire (ABE) | Visual Contract Nail Marketplace" />
+  <meta
+    property="og:description"
+    content="Fixed-price nail bookings in Cape Town (CPT) and Johannesburg (JHB). Protected by 4-digit start PINs, live completion photos, and verified commercial salons."
+  />
+  <meta property="og:type" content="website" />
+  <link rel="canonical" href="https://abe.co.za/" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav-bar">
+      <a class="brand-mark" href="#top">
+        <span class="brand-monogram">ABE</span>
+        <span>Aqeelah's Beauty Empire</span>
+      </a>
+      <nav class="nav-links" aria-label="Primary navigation">
+        <a href="#showcase">Visual Contracts</a>
+        <a href="#onboarding">Apply as Tech</a>
+        <a href="#onboarding">List Empty Chairs</a>
+        <a href="#waitlist">Waitlist &amp; App</a>
+        <a href="#policies">Policies</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="container hero-grid">
+        <div>
+          <span class="eyebrow-pill">Cape Town (CPT) &amp; Johannesburg (JHB) Launch</span>
+          <h1>Book the exact nail look you love, with zero guesswork.</h1>
+          <p class="hero-copy">
+            Every portfolio photo on Aqeelah's Beauty Empire is a Visual Contract: a fixed ZAR price, an exact appointment duration, and a verified commercial studio or partner salon chair. No residential house calls. No 20-minute WhatsApp back-and-forth.
+          </p>
+          <div class="cta-row">
+            <a class="btn btn-primary" href="#showcase">Explore CPT &amp; JHB Looks</a>
+            <a class="btn btn-secondary" href="#onboarding">Apply as Founding Tech</a>
+          </div>
+        </div>
+
+        <aside class="trust-panel" aria-label="ABE Safety and Payment Guarantees">
+          <h2 class="trust-heading">
+            Built for Client &amp; Tech Protection
+          </h2>
+          <p class="trust-subcopy">
+            Founded by Aqeelah (Cape Town) and Rio (Johannesburg).
+          </p>
+          <ul class="trust-list">
+            <li>
+              <strong>Strict Venue-Only Policy</strong>
+              Every appointment takes place at a verified commercial studio or partner salon. Residential house calls are strictly blocked.
+            </li>
+            <li>
+              <strong>4-Digit Start PIN &amp; Live Camera Lock</strong>
+              Your tech verifies biometrics plus your private 4-digit PIN to begin, and captures a live in-app photo when finished.
+            </li>
+            <li>
+              <strong>South African ZAR Checkout</strong>
+              Pay upfront by Card, Instant EFT (Paystack / Peach Payments), or 3 interest-free monthly instalments via PayJustNow.
+            </li>
+          </ul>
+        </aside>
+      </div>
+    </section>
+
+    <section class="section" id="showcase">
+      <div class="container">
+        <div class="section-header">
+          <div>
+            <h2>Live CPT &amp; JHB Visual Contract Showcase</h2>
+            <p class="section-subtitle">
+              Transparent pricing in Rands, exact chair durations, and verified salon locations.
+            </p>
+          </div>
+          <div class="filter-pills" role="group" aria-label="Filter looks by launch city">
+            <button type="button" class="pill-btn active" data-city-filter="ALL">All Cities</button>
+            <button type="button" class="pill-btn" data-city-filter="CPT">Cape Town (CPT)</button>
+            <button type="button" class="pill-btn" data-city-filter="JHB">Johannesburg (JHB)</button>
+          </div>
+        </div>
+        <div id="showcase-grid" class="showcase-grid" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <section class="section" id="onboarding">
+      <div class="container forms-grid">
+        <article class="form-card">
+          <h3>Apply as a Founding Nail Tech</h3>
+          <p class="section-subtitle">
+            Keep your studio standards high with upfront bookings, 25% late-cancellation protection, and weekly ZAR payouts.
+          </p>
+          <form id="tech-application-form" class="field-grid" novalidate>
+            <div>
+              <label for="tech-full-name">Full Name</label>
+              <input id="tech-full-name" name="fullName" type="text" maxlength="120" required placeholder="e.g. Nadia Jacobs" />
+            </div>
+            <div class="field-row-2">
+              <div>
+                <label for="tech-ig">Instagram or TikTok Handle</label>
+                <input id="tech-ig" name="instagramHandle" type="text" maxlength="80" required placeholder="@nadia_biab_cpt" />
+              </div>
+              <div>
+                <label for="tech-city">Launch City</label>
+                <select id="tech-city" name="city" required>
+                  <option value="CPT">Cape Town (CPT)</option>
+                  <option value="JHB">Johannesburg (JHB)</option>
+                </select>
+              </div>
+            </div>
+            <div class="field-row-2">
+              <div>
+                <label for="tech-email">Email Address</label>
+                <input id="tech-email" name="email" type="email" maxlength="160" required placeholder="nadia@example.co.za" />
+              </div>
+              <div>
+                <label for="tech-phone">South African Mobile</label>
+                <input id="tech-phone" name="phone" type="tel" maxlength="32" required placeholder="082 000 0000" />
+              </div>
+            </div>
+            <div class="field-row-2">
+              <div>
+                <label for="tech-venue-type">Commercial Venue Type</label>
+                <select id="tech-venue-type" name="venueType" required>
+                  <option value="verified_studio">My Commercial Studio / Rented Suite</option>
+                  <option value="partner_salon_chair">Need Partner Salon Empty Chair</option>
+                </select>
+              </div>
+              <div>
+                <label for="tech-price-range">Typical Base Price (ZAR)</label>
+                <input id="tech-price-range" name="basePriceRangeZar" type="text" maxlength="40" required placeholder="R380 - R650" />
+              </div>
+            </div>
+            <div>
+              <label for="tech-venue-name">Commercial Studio / Salon Name</label>
+              <input id="tech-venue-name" name="venueName" type="text" maxlength="140" required placeholder="e.g. Atelier Rose Studio" />
+            </div>
+            <div>
+              <label for="tech-venue-address">Commercial Street Address (No Residential Home Visits)</label>
+              <input id="tech-venue-address" name="venueAddress" type="text" maxlength="240" required placeholder="e.g. 118 Regent Road, Sea Point, Cape Town" />
+            </div>
+            <div>
+              <label for="tech-specialty">Signature Nail Sets</label>
+              <input id="tech-specialty" name="specialty" type="text" maxlength="140" required placeholder="Structured BIAB, Gel-X, Micro French" />
+            </div>
+            <label class="checkbox-row">
+              <input id="tech-popia" name="popiaConsent" type="checkbox" required />
+              <span>I consent to ABE processing my application under POPIA and confirm I work strictly from a commercial venue (no house calls).</span>
+            </label>
+            <button class="btn btn-primary" type="submit">Submit Founding Tech Application</button>
+            <div id="tech-form-status" class="status-banner" role="status" aria-live="polite"></div>
+          </form>
+        </article>
+
+        <article class="form-card">
+          <h3>List Your Salon's Empty Chairs</h3>
+          <p class="section-subtitle">
+            Turn quiet Tuesday to Thursday nail stations into guaranteed chair fees from vetted ABE Founding Techs.
+          </p>
+          <form id="salon-application-form" class="field-grid" novalidate>
+            <div class="field-row-2">
+              <div>
+                <label for="salon-name">Salon Business Name</label>
+                <input id="salon-name" name="salonName" type="text" maxlength="140" required placeholder="e.g. Alabaster Nail Bar" />
+              </div>
+              <div>
+                <label for="salon-owner">Owner / Manager Name</label>
+                <input id="salon-owner" name="ownerName" type="text" maxlength="120" required placeholder="e.g. Carla Louw" />
+              </div>
+            </div>
+            <div class="field-row-2">
+              <div>
+                <label for="salon-email">Work Email</label>
+                <input id="salon-email" name="email" type="email" maxlength="160" required placeholder="carla@alabasternails.co.za" />
+              </div>
+              <div>
+                <label for="salon-phone">Salon Contact Number</label>
+                <input id="salon-phone" name="phone" type="tel" maxlength="32" required placeholder="021 000 0000" />
+              </div>
+            </div>
+            <div class="field-row-2">
+              <div>
+                <label for="salon-city">Launch City</label>
+                <select id="salon-city" name="city" required>
+                  <option value="CPT">Cape Town (CPT)</option>
+                  <option value="JHB">Johannesburg (JHB)</option>
+                </select>
+              </div>
+              <div>
+                <label for="salon-suburb">Suburb</label>
+                <input id="salon-suburb" name="suburb" type="text" maxlength="100" required placeholder="e.g. Claremont / Rosebank" />
+              </div>
+            </div>
+            <div>
+              <label for="salon-address">Commercial Street Address</label>
+              <input id="salon-address" name="streetAddress" type="text" maxlength="240" required placeholder="e.g. 42 Vineyard Road, Claremont" />
+            </div>
+            <div class="field-row-2">
+              <div>
+                <label for="salon-chairs">Spare Nail Stations</label>
+                <input id="salon-chairs" name="availableChairs" type="number" min="1" max="50" value="2" required />
+              </div>
+              <div>
+                <label for="salon-fee">Suggested Chair Fee (ZAR)</label>
+                <input id="salon-fee" name="suggestedChairFeeZar" type="number" min="0" max="2000" value="95" required />
+              </div>
+            </div>
+            <div>
+              <label for="salon-hours">Quiet Mid-Week Hours</label>
+              <input id="salon-hours" name="quietDaysWindow" type="text" maxlength="120" required placeholder="e.g. Tue - Thu, 09:30 - 14:30" />
+            </div>
+            <label class="checkbox-row">
+              <input id="salon-popia" name="popiaConsent" type="checkbox" required />
+              <span>I consent to ABE verifying my commercial salon premises under POPIA for Empty Chair partner listings.</span>
+            </label>
+            <button class="btn btn-primary" type="submit">List Empty Chairs</button>
+            <div id="salon-form-status" class="status-banner" role="status" aria-live="polite"></div>
+          </form>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="waitlist">
+      <div class="container waitlist-box">
+        <div>
+          <span class="eyebrow-pill">Founding Client Launch Credit</span>
+          <h2 class="waitlist-heading">
+            Claim your R50 Launch Voucher &amp; Download the App
+          </h2>
+          <p class="section-subtitle">
+            Join the Cape Town and Johannesburg launch list to unlock code <strong>ABE_FOUNDING_50</strong> towards your first Visual Contract booking on iOS or Android.
+          </p>
+          <div class="app-badges">
+            <span class="store-pill">iOS App Store (CPT &amp; JHB Beta)</span>
+            <span class="store-pill">Google Play (Android Release)</span>
+          </div>
+        </div>
+
+        <form id="waitlist-form" class="field-grid" novalidate>
+          <div class="field-row-2">
+            <div>
+              <label for="waitlist-name">First Name</label>
+              <input id="waitlist-name" name="firstName" type="text" maxlength="80" required placeholder="e.g. Zara" />
+            </div>
+            <div>
+              <label for="waitlist-city">Your City</label>
+              <select id="waitlist-city" name="city" required>
+                <option value="CPT">Cape Town (CPT)</option>
+                <option value="JHB">Johannesburg (JHB)</option>
+              </select>
+            </div>
+          </div>
+          <div>
+            <label for="waitlist-email">Email Address</label>
+            <input id="waitlist-email" name="email" type="email" maxlength="160" required placeholder="zara@example.co.za" />
+          </div>
+          <div>
+            <label for="waitlist-look">Favourite Nail Style</label>
+            <input id="waitlist-look" name="preferredLook" type="text" maxlength="120" value="BIAB &amp; Micro French" />
+          </div>
+          <label class="checkbox-row">
+            <input id="waitlist-popia" name="popiaConsent" type="checkbox" required />
+            <span>I agree to receive launch updates and my R50 ABE voucher in line with POPIA.</span>
+          </label>
+          <button class="btn btn-primary" type="submit">Claim R50 Waitlist Voucher</button>
+          <div id="waitlist-form-status" class="status-banner" role="status" aria-live="polite"></div>
+        </form>
+      </div>
+    </section>
+
+    <section class="section" id="policies">
+      <div class="container">
+        <div class="section-header">
+          <div>
+            <h2>Cancellation, Refund &amp; POPIA Policies</h2>
+            <p class="section-subtitle">
+              Clear rules protecting clients, nail technicians, and partner salons across South Africa.
+            </p>
+          </div>
+        </div>
+        <div class="policy-grid">
+          <article class="policy-card">
+            <h3>Cancellation &amp; Wallet Refunds</h3>
+            <p>
+              Client late cancellations credit 75% to the client's closed-loop ABE Wallet and allocate 25% to the nail tech's earnings ledger. If a technician cancels, the client receives 100% ABE Wallet credit plus a single-use apology voucher. Client ABE Wallet balances are closed-loop and are applied automatically at checkout (non-withdrawable).
+            </p>
+          </article>
+          <article class="policy-card">
+            <h3>POPIA Privacy Compliance</h3>
+            <p>
+              Personal information is collected strictly for booking verification, commercial venue safety checks, and payment settlement in accordance with the Protection of Personal Information Act (POPIA). Card details are tokenised by licensed South African gateways; raw card numbers are never stored by ABE.
+            </p>
+          </article>
+          <article class="policy-card">
+            <h3>Terms &amp; Merchant Support</h3>
+            <p>
+              All appointments take place at verified commercial studios or partner salons in Cape Town (CPT) and Johannesburg (JHB). For booking disputes, compliance, or merchant enquiries, contact <a href="mailto:support@abe.co.za">support@abe.co.za</a>.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-flex">
+      <span>&copy; 2026 Aqeelah's Beauty Empire (ABE). Cape Town &amp; Johannesburg, South Africa.</span>
+      <span>Support: <a href="mailto:support@abe.co.za">support@abe.co.za</a></span>
+    </div>
+  </footer>
+
+  <script src="js/app.js" defer></script>
+</body>
+</html>

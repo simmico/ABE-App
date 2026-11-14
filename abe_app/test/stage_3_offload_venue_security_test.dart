@@ -396,34 +396,16 @@ void main() {
       );
     });
 
-    test('rejects residential venue text during validateAndBuildBookingPayload', () {
-      final residentialVenue = CommercialVenue(
-        id: 'venue_cpt_res_01',
-        name: 'Residential Nail Corner',
-        city: 'CPT',
-        suburb: 'Claremont',
-        address: '15 Protea Avenue, Claremont, Cape Town',
-        type: CommercialVenueType.verifiedStudio,
-        isVerified: true,
-      );
-
-      final selection = BookingVenueSelection(
-        venueType: BookingVenueType.verifiedStudio,
-        venue: residentialVenue,
-        verifiedStudioId: residentialVenue.id,
-      );
-
+    test('rejects residential venue text at CommercialVenue construction before booking payload creation', () {
       expect(
-        () => service.validateAndBuildBookingPayload(
-          bookingId: 'bk_res_01',
-          clientId: 'client_01',
-          techId: 'tech_01',
-          visualContractItemId: 'vc_01',
-          venueSelection: selection,
+        () => CommercialVenue(
+          id: 'venue_cpt_res_01',
+          name: 'Residential Nail Corner',
           city: 'CPT',
-          totalPriceZar: 450,
-          totalDurationMinutes: 75,
-          scheduledAt: DateTime.utc(2026, 11, 24, 14, 0),
+          suburb: 'Claremont',
+          address: '15 Protea Avenue, Claremont, Cape Town',
+          type: CommercialVenueType.verifiedStudio,
+          isVerified: true,
         ),
         throwsArgumentError,
       );

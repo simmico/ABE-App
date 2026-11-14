@@ -574,6 +574,7 @@ class _TechStartAppointmentScreenState
                 child: Semantics(
                   label: 'Delete digit',
                   button: true,
+                  excludeSemantics: true,
                   child: OutlinedButton(
                     key: const Key('pin_backspace_button'),
                     onPressed: enabled ? _backspaceDigit : null,

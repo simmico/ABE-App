@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en-ZA">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Quick Profile Seeder | Aqeelah's Beauty Empire (ABE)</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav-bar">
+      <a class="brand-mark" href="index.html">
+        <span class="brand-monogram">ABE</span>
+        <span>Admin Quick Profile Seeder</span>
+      </a>
+      <nav class="nav-links">
+        <a href="index.html">Back to Public Site</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="section">
+    <div class="container container-narrow">
+      <article class="form-card">
+        <span class="eyebrow-pill">UAC Permission Required: techs.approve + Firebase App Check</span>
+        <h1 class="seeder-heading">
+          Seed a Founding Tech Visual Contract
+        </h1>
+        <p class="section-subtitle">
+          For Rio (JHB) and Aqeelah (CPT) to validate and stage Founding Tech portfolios for the authenticated admin callable (`adminSeedFoundingProfile`) with Strict Venue-Only checks and StaffAuditLog tracking.
+        </p>
+
+        <form id="admin-seeder-form" class="field-grid" novalidate>
+          <div class="field-row-2">
+            <div>
+              <label for="seed-tech-name">Tech Display Name</label>
+              <input id="seed-tech-name" name="techDisplayName" type="text" maxlength="120" required placeholder="e.g. Nadia Jacobs" />
+            </div>
+            <div>
+              <label for="seed-city">Launch City</label>
+              <select id="seed-city" name="city" required>
+                <option value="CPT">Cape Town (CPT)</option>
+                <option value="JHB">Johannesburg (JHB)</option>
+              </select>
+            </div>
+          </div>
+          <div class="field-row-2">
+            <div>
+              <label for="seed-tier">Merit Tier Badge</label>
+              <select id="seed-tier" name="tierBadge" required>
+                <option value="rising">Rising Tech</option>
+                <option value="verified">Verified Tech</option>
+                <option value="certified_pro">Certified Pro</option>
+              </select>
+            </div>
+            <div>
+              <label for="seed-venue-type">Commercial Venue Type</label>
+              <select id="seed-venue-type" name="venueType" required>
+                <option value="verified_studio">Verified Commercial Studio</option>
+                <option value="partner_salon_chair">Partner Salon Empty Chair</option>
+              </select>
+            </div>
+          </div>
+          <div class="field-row-2">
+            <div>
+              <label for="seed-venue-id">Verified Venue ID</label>
+              <input id="seed-venue-id" name="venueId" type="text" maxlength="128" required placeholder="venue_cpt_seapoint_01" />
+            </div>
+            <div>
+              <label for="seed-venue-name">Commercial Venue Name</label>
+              <input id="seed-venue-name" name="venueName" type="text" maxlength="140" required placeholder="Atelier Rose Studio, Sea Point" />
+            </div>
+          </div>
+          <div>
+            <label for="seed-title">Visual Contract Look Title</label>
+            <input id="seed-title" name="lookTitle" type="text" maxlength="140" required placeholder="Sculpted Almond BIAB &amp; Micro French" />
+          </div>
+          <div class="field-row-2">
+            <div>
+              <label for="seed-price">Base Price (R150 to R5000)</label>
+              <input id="seed-price" name="basePriceZar" type="number" min="150" max="5000" value="450" required />
+            </div>
+            <div>
+              <label for="seed-duration">Duration (30 to 300 mins)</label>
+              <input id="seed-duration" name="baseDurationMinutes" type="number" min="30" max="300" value="90" required />
+            </div>
+          </div>
+          <div>
+            <label for="seed-photo">HTTPS Nail Portfolio Photo URL</label>
+            <input id="seed-photo" name="photoUrl" type="url" maxlength="500" required placeholder="https://cdn.abe.co.za/cpt/nadia_biab.jpg" />
+          </div>
+          <button class="btn btn-primary" type="submit">Validate &amp; Stage Seed Payload</button>
+          <div id="seeder-status" class="status-banner" role="status" aria-live="polite"></div>
+        </form>
+      </article>
+    </div>
+  </main>
+
+  <script src="js/app.js" defer></script>
+</body>
+</html>

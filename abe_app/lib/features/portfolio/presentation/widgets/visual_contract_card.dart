@@ -26,6 +26,7 @@ class VisualContractCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Semantics(
       button: onTap != null,
+      excludeSemantics: true,
       label:
           '${item.title} by ${item.techDisplayName}, ${item.techTierBadge.label}, '
           'base price ${item.formattedBasePrice}, duration ${item.formattedBaseDuration}, '

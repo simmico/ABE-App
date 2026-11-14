@@ -1,0 +1,17 @@
+{
+  "name": "abe-cloud-functions",
+  "version": "1.0.0",
+  "description": "Firebase Cloud Functions for Aqeelah's Beauty Empire (ABE): SA payment webhooks, 4-digit PIN generation, automated reminders, and public onboarding endpoints.",
+  "type": "module",
+  "main": "src/index.js",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "scripts": {
+    "test": "node --test test/*.test.js"
+  },
+  "dependencies": {
+    "firebase-admin": "^13.0.0",
+    "firebase-functions": "^6.1.0"
+  }
+}

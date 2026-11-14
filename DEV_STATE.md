@@ -5,10 +5,10 @@
 ---
 
 ## 1. Current Overall Build Status
-- **Active Stage:** Stage 4 Completed (Ready for Stage 5: `chats/CHAT_5_PAYMENTS_LAUNCH.md`)
-- **Active Chat File:** `chats/CHAT_4_SECURITY_WALLET.md` (All Stage 4 sub-tasks `12.1` to `15.4` completed)
-- **Next Sub-Task to Execute:** `Sub-task 16.1` in `chats/CHAT_5_PAYMENTS_LAUNCH.md`
-- **Completed Roadmap Items (Rio's Track):** `Item 1` through `Item 15` (`15 / 18` completed)
+- **Active Stage:** Stage 5 Complete (`chats/CHAT_5_PAYMENTS_LAUNCH.md`)
+- **Active Chat File:** `chats/CHAT_5_PAYMENTS_LAUNCH.md` (All Stage 5 Items 16 to 18 complete; launch ready for CPT & JHB)
+- **Next Sub-Task to Execute:** None (`18 / 18` completed)
+- **Completed Roadmap Items (Rio's Track):** `Item 1` through `Item 18` (`18 / 18` completed)
 
 ---
 
@@ -58,6 +58,6 @@ All agents working in this workspace have direct access to these installed local
 - [x] **Item 13:** In-App Live Completion Camera Lock (`AppointmentCompletionLockService`, `OfflineEncryptedPhotoQueue`, `TechCompleteAppointmentScreen`)
 - [x] **Item 14:** Closed-Loop Wallet & 75/25 Cancellation Split (`WalletAndLedgerService`, `CouponVoucherService`, `ClientWalletScreen`, `TechEarningsScreen`)
 - [x] **Item 15:** 3-Photo Dispute View & Empty Chair Salon Portal (`MasterAdminCommandCentreScreen`, `DisputeSupportQueueScreen`, `StockUpStoreAndWarehouseScreen`, `SalonPartnerPortalScreen`)
-- [ ] **Item 16:** South African Payment Gateways (Paystack/Peach + PayJustNow)
-- [ ] **Item 17:** Full Security Audit & End-to-End QA
-- [ ] **Item 18:** Production Deployment (CPT & JHB Launch)
+- [x] **Item 16:** South African Payment Gateways (Paystack/Peach + PayJustNow), Webhook & Notification Handlers (`functions/`), and CSP/XSS-Hardened Public Website + Admin Quick Profile Seeder (`public-site/`)
+- [x] **Item 17:** Full Security Audit & End-to-End QA
+- [x] **Item 18:** Production Deployment (CPT & JHB Launch)

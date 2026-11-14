@@ -4,6 +4,8 @@ founder-hub/
 # Environment & Secrets
 .env
 .env.*
+!.env.example
+key.properties
 *.jks
 *.keystore
 *.p12

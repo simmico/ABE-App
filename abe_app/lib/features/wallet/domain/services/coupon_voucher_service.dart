@@ -25,6 +25,30 @@ class CouponVoucherService {
           issuedForReason: 'launch_event',
         ),
       );
+      createOrUpdateCoupon(
+        PromoCouponRecord(
+          id: 'vch_welcome_50',
+          code: 'ABEWELCOME50',
+          discountType: VoucherDiscountType.fixedZar,
+          discountValue: 50,
+          minSpendZar: 350,
+          maxRedemptions: 500,
+          perUserLimit: 1,
+          issuedForReason: 'First booking welcome voucher',
+        ),
+      );
+      createOrUpdateCoupon(
+        PromoCouponRecord(
+          id: 'vch_founding_100',
+          code: 'FOUNDING100',
+          discountType: VoucherDiscountType.fixedZar,
+          discountValue: 100,
+          minSpendZar: 500,
+          maxRedemptions: 200,
+          perUserLimit: 1,
+          issuedForReason: 'Cape Town & Johannesburg launch celebration',
+        ),
+      );
     }
   }
 

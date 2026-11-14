@@ -60,9 +60,18 @@ class CommercialVenue {
       throw ArgumentError('CommercialVenue.address cannot be empty.');
     }
     final lowerAddr = '${this.name} ${this.address}'.toLowerCase();
-    if (lowerAddr.contains('house call') ||
-        lowerAddr.contains('home visit') ||
-        lowerAddr.contains('mobile tech')) {
+    const forbiddenResidentialTerms = <String>[
+      'house call',
+      'house_call',
+      'housecall',
+      'home visit',
+      'home_visit',
+      'residential',
+      'private home',
+      'client address',
+      'mobile tech',
+    ];
+    if (forbiddenResidentialTerms.any(lowerAddr.contains)) {
       throw ArgumentError(
         'Strict Venue-Only Policy violation: residential or house-call venues are prohibited.',
       );

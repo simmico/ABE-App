@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /admin-seeder.html
+
+Sitemap: https://abe.co.za/sitemap.xml

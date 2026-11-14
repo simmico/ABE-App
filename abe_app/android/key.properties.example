@@ -1,0 +1,6 @@
+# Copy to key.properties (git-ignored) before building a signed Android release bundle:
+# flutter build appbundle --release --flavor prod --dart-define-from-file=.env.prod.json
+storePassword=REPLACE_WITH_KEYSTORE_PASSWORD
+keyPassword=REPLACE_WITH_KEY_PASSWORD
+keyAlias=abe_release
+storeFile=../../keystore/abe-release.jks

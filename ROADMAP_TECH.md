@@ -175,7 +175,7 @@
 ### Item 16: South African Payment Gateways and Profile Seeding
 > [!IMPORTANT]
 > **RIO'S FOCUS (JHB):**
-> - [ ] **Integrate Payment Gateways & Load Profiles:** Connect Paystack or Peach Payments (Card tokenisation + Instant EFT) and PayJustNow (BNPL webhook) so full upfront funds land in our float account. Assist Aqeelah in loading Founding Tech profiles.
+> - [x] **Integrate Payment Gateways & Load Profiles:** Connect Paystack or Peach Payments (Card tokenisation + Instant EFT) and PayJustNow (BNPL webhook) so full upfront funds land in our float account. Assist Aqeelah in loading Founding Tech profiles.
 
 * **Aqeelah's Focus (CPT):**
   - [ ] Upload approved CPT Founding Tech portfolios into the app and send each tech a preview screenshot of their live profile. *(Growth: Seeing Tangible Results)*
@@ -185,7 +185,7 @@
 ### Item 17: Full Security Audit and End-to-End Bug Bash
 > [!IMPORTANT]
 > **RIO'S FOCUS (JHB):**
-> - [ ] **Security Audit & Bug Fixes:** Audit database security rules (preventing wallet cash withdrawals or PIN spoofing), fix all issues found during Aqeelah's testing, and confirm partner salon stations in JHB and CPT.
+> - [x] **Security Audit & Bug Fixes:** Audit database security rules (preventing wallet cash withdrawals or PIN spoofing), fix all issues found during Aqeelah's testing, and confirm partner salon stations in JHB and CPT.
 
 * **Aqeelah's Focus (CPT):**
   - [ ] Run a full "Break the App" test on her phone as both a client and a nail tech (booking, modifiers, PIN entry, live camera, cancellation). *(Growth: Protecting Our Reputation)*
@@ -195,7 +195,7 @@
 ### Item 18: Production Deployment and Soft Launch
 > [!IMPORTANT]
 > **RIO'S FOCUS (JHB):**
-> - [ ] **Go Live & Monitor Transactions:** Deploy live iOS and Android builds, switch payment keys to production, and monitor webhooks and live bookings.
+> - [x] **Go Live & Monitor Transactions:** Deploy live iOS and Android builds, switch payment keys to production, and monitor webhooks and live bookings.
 
 * **Aqeelah's Focus (CPT):**
   - [ ] Post the first "Inspo vs. Reality" launch videos, confirm Founding Tech calendars are active, and invite the first wave of CPT clients to book. *(Growth: Stepping Out as Co-Founder)*

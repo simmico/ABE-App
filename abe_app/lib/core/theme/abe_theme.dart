@@ -64,7 +64,7 @@ abstract final class AbeTheme {
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
-          backgroundColor: BrandConfig.rosePrimary,
+          backgroundColor: BrandConfig.roseDark,
           foregroundColor: BrandConfig.surfaceCard,
           disabledBackgroundColor: BrandConfig.borderWarm,
           disabledForegroundColor: BrandConfig.textMuted,
@@ -86,7 +86,7 @@ abstract final class AbeTheme {
         style: OutlinedButton.styleFrom(
           foregroundColor: BrandConfig.espresso,
           backgroundColor: BrandConfig.surfaceCard,
-          side: const BorderSide(color: BrandConfig.borderWarm, width: 1.2),
+          side: const BorderSide(color: Color(0xFFA89592), width: 1.2),
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
           minimumSize: const Size(48, 50),
           shape: RoundedRectangleBorder(
@@ -116,7 +116,7 @@ abstract final class AbeTheme {
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(BrandConfig.inputRadius),
-          borderSide: const BorderSide(color: BrandConfig.borderWarm, width: 1),
+          borderSide: const BorderSide(color: Color(0xFFA89592), width: 1),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(BrandConfig.inputRadius),
@@ -143,11 +143,11 @@ abstract final class AbeTheme {
         ),
         secondaryLabelStyle: const TextStyle(
           fontFamily: BrandConfig.bodyFontFamily,
-          color: BrandConfig.roseDark,
+          color: BrandConfig.espresso,
           fontSize: 13,
           fontWeight: FontWeight.w700,
         ),
-        side: const BorderSide(color: BrandConfig.borderWarm, width: 1),
+        side: const BorderSide(color: Color(0xFFA89592), width: 1),
         shape: const StadiumBorder(),
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       ),
