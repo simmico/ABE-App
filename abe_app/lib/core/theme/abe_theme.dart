@@ -205,6 +205,12 @@ abstract final class AbeTheme {
         fontWeight: FontWeight.w600,
         color: BrandConfig.espresso,
       ),
+      titleSmall: TextStyle(
+        fontFamily: BrandConfig.bodyFontFamily,
+        fontSize: 14,
+        fontWeight: FontWeight.w700,
+        color: BrandConfig.espresso,
+      ),
       bodyLarge: TextStyle(
         fontFamily: BrandConfig.bodyFontFamily,
         fontSize: 15,
@@ -217,6 +223,13 @@ abstract final class AbeTheme {
         fontSize: 14,
         fontWeight: FontWeight.w400,
         height: 1.45,
+        color: BrandConfig.textMuted,
+      ),
+      bodySmall: TextStyle(
+        fontFamily: BrandConfig.bodyFontFamily,
+        fontSize: 12,
+        fontWeight: FontWeight.w500,
+        height: 1.4,
         color: BrandConfig.textMuted,
       ),
       labelLarge: TextStyle(

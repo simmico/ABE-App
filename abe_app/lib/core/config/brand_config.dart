@@ -80,6 +80,15 @@ abstract final class BrandConfig {
   /// Warm terracotta error colour for validation and dispute alerts (`#B85450`).
   static const Color errorTerracotta = Color(0xFFB85450);
 
+  /// Soft sage tint for verified and completed status surfaces (`#EAF2EE`).
+  static const Color sageSoft = Color(0xFFEAF2EE);
+
+  /// Soft terracotta tint for error and lockout banners (`#FCECEC`).
+  static const Color errorSoft = Color(0xFFFCECEC);
+
+  /// Soft warm champagne tint for offline queue and notice cards (`#FFF8EE`).
+  static const Color champagneSoft = Color(0xFFFFF8EE);
+
   // ---------------------------------------------------------------------------
   // Component Radii & Shadows
   // ---------------------------------------------------------------------------

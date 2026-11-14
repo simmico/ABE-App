@@ -96,7 +96,7 @@
 ### Item 9: Tech Availability Calendar and Slot Generator
 > [!IMPORTANT]
 > **RIO'S FOCUS (JHB):**
-> - [ ] **Build the Tech Calendar & Slot Engine:** Implement working hours, buffer times, and slot generation that accounts for the exact duration of the chosen Visual Contract plus selected modifiers.
+> - [x] **Build the Tech Calendar & Slot Engine:** Implement working hours, buffer times, and slot generation that accounts for the exact duration of the chosen Visual Contract plus selected modifiers.
 
 * **Aqeelah's Focus (CPT):**
   - [ ] Read and personalise the warm DM outreach templates so they sound natural in her own voice. *(Growth: Preparation Beats Nervousness)*
@@ -106,7 +106,7 @@
 ### Item 10: Strict Venue-Only Booking Lock (No House Calls) and JHB Outreach
 > [!IMPORTANT]
 > **RIO'S FOCUS (JHB):**
-> - [ ] **Enforce Venue-Only Bookings & Message 5 JHB Techs:** Require every booking in code to link to either (a) a Tech's Verified Commercial Studio or (b) an available "Empty Chair" slot at a Partner Salon (blocking residential house calls). Send the warm research DM to 5 JHB techs.
+> - [x] **Enforce Venue-Only Bookings & Message 5 JHB Techs:** Require every booking in code to link to either (a) a Tech's Verified Commercial Studio or (b) an available "Empty Chair" slot at a Partner Salon (blocking residential house calls). Send the warm research DM to 5 JHB techs.
 
 * **Aqeelah's Focus (CPT):**
   - [ ] Send the friendly "Market Research Question" DM to 5 CPT nail techs asking about their biggest booking frustrations. *(Growth: Warming Up Social Confidence - Level 1)*
@@ -116,7 +116,7 @@
 ### Item 11: Tier Badge System UI
 > [!IMPORTANT]
 > **RIO'S FOCUS (JHB):**
-> - [ ] **Build the Grading & Badge Engine:** Implement the logic and UI badges for *Rising Tech*, *Verified Tech* (unlocked via completed bookings, rating threshold, and completion photos), and *Certified Pro* (unlocked via Aqeelah's audition approval).
+> - [x] **Build the Grading & Badge Engine:** Implement the logic and UI badges for *Rising Tech*, *Verified Tech* (unlocked via completed bookings, rating threshold, and completion photos), and *Certified Pro* (unlocked via Aqeelah's audition approval).
 
 * **Aqeelah's Focus (CPT):**
   - [ ] Reply warmly to techs from Item 10 to invite them onto the Founding Tech list, and message 5 new CPT techs. *(Growth: Turning Conversations into Opportunities)*
@@ -129,7 +129,7 @@
 ### Item 12: Biometric + 4-Digit Randomised PIN Start Lock
 > [!IMPORTANT]
 > **RIO'S FOCUS (JHB):**
-> - [ ] **Build the Appointment Start Security Lock:** Generate a unique, randomised 4-digit PIN on the client's booking screen. Require the tech to pass Biometric/Selfie verification AND enter the client's 4-digit PIN to start the appointment timer.
+> - [x] **Build the Appointment Start Security Lock:** Generate a unique, randomised 4-digit PIN on the client's booking screen. Require the tech to pass Biometric/Selfie verification AND enter the client's 4-digit PIN to start the appointment timer.
 
 * **Aqeelah's Focus (CPT):**
   - [ ] Send a 30-second friendly voice note to 3 interested techs asking for 3 to 5 photos of their favourite nail sets to build their preview profile. *(Growth: Finding Your Voice - Level 2)*
@@ -139,7 +139,7 @@
 ### Item 13: In-App Live Completion Camera Lock
 > [!IMPORTANT]
 > **RIO'S FOCUS (JHB):**
-> - [ ] **Build the Live Completion Camera Lock:** Force the "Complete Appointment" button to open the native in-app camera directly (blocking gallery uploads) so the tech captures a live photo of the finished nails to unlock their payout.
+> - [x] **Build the Live Completion Camera Lock:** Force the "Complete Appointment" button to open the native in-app camera directly (blocking gallery uploads) so the tech captures a live photo of the finished nails to unlock their payout.
 
 * **Aqeelah's Focus (CPT):**
   - [ ] Review and approve the first batch of real nail photos sent by Founding Techs using her Item 1 Quality Checklist. *(Growth: Exercising Quality Authority)*
@@ -149,7 +149,7 @@
 ### Item 14: Closed-Loop Wallet and 75/25 Cancellation Engine
 > [!IMPORTANT]
 > **RIO'S FOCUS (JHB):**
-> - [ ] **Build the Wallet Ledger & Cancellation Splits:**
+> - [x] **Build the Wallet Ledger & Cancellation Splits:**
 >   - Client Closed-Loop Wallet (non-withdrawable credits, auto-applied at checkout).
 >   - Tech Earnings Ledger (gross minus 15% fee, weekly payouts, and Instant Cash-Out with fee).
 >   - Automated Cancellation Logic: 75% to client wallet / 25% to tech for late client cancellations; 100% to client wallet + discount voucher if tech cancels.
@@ -162,7 +162,7 @@
 ### Item 15: 3-Photo Dispute View, Empty Chair Portal, and JHB Salons
 > [!IMPORTANT]
 > **RIO'S FOCUS (JHB):**
-> - [ ] **Build the Dispute View & Empty Chair Portal:** Create the side-by-side Admin Dispute tool (Portfolio Photo vs. Tech Live Camera Photo vs. Client Complaint Photo) and the Salon Partner station listing view. Contact 2 independent salons in JHB.
+> - [x] **Build the Dispute View & Empty Chair Portal:** Create the side-by-side Admin Dispute tool (Portfolio Photo vs. Tech Live Camera Photo vs. Client Complaint Photo) and the Salon Partner station listing view. Contact 2 independent salons in JHB.
 
 * **Aqeelah's Focus (CPT):**
   - [ ] Contact or visit 3 quiet independent salons in CPT with the 1-page "Empty Chair" partner summary. *(Growth: Real-World Assertiveness - Level 4)*
