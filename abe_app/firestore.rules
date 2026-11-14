@@ -1,0 +1,826 @@
+rules_version = '2';
+
+// ===============================================================
+// Assumed Data Model (Aqeelah's Beauty Empire - ABE)
+// ===============================================================
+//
+// This security rules file enforces the non-negotiable business and security
+// invariants for Aqeelah's Beauty Empire (ABE) across Cape Town ('CPT') and
+// Johannesburg ('JHB').
+//
+// Collection: users/{userId}
+// Fields:
+//   - id: string (required, immutable, matches userId, 1..128 chars)
+//   - name: string (required, 1..120 chars)
+//   - email: string (required, valid email, 3..160 chars)
+//   - uacGroupId: string (required, in ['super_admin', 'ops_admin', 'support_agent', 'supplier_partner', 'salon_partner', 'tech', 'client'])
+//   - city: string (required, in ['CPT', 'JHB'])
+//   - permissions: list of strings (required, max 20 items, granular UAC overrides)
+//   - isActive: bool (required, instant revocation switch)
+//   - walletBalanceZar: number (required, >= 0, read-only for self, closed-loop float)
+//
+// Collection: uac_groups/{groupId}
+// Fields:
+//   - id: string (required, immutable, matches groupId, 1..64 chars)
+//   - name: string (required, 1..120 chars)
+//   - permissions: list of strings (required, max 30 items)
+//   - isActive: bool (required)
+//
+// Collection: tech_profiles/{userId}
+// Fields:
+//   - userId: string (required, immutable, matches userId, 1..128 chars)
+//   - displayName: string (required, 1..120 chars)
+//   - tierBadge: string (required, in ['rising', 'verified', 'certified_pro'])
+//   - verifiedStudioId: string (required, 1..128 chars, Strict Venue-Only Policy)
+//   - city: string (required, in ['CPT', 'JHB'])
+//   - bio: string (required, 0..500 chars)
+//   - pendingStoreCreditZar: number (required, >= 0, protected system field)
+//   - rating: number (required, 0..5, protected system field)
+//   - completedBookingsCount: int (required, >= 0, protected system field)
+//   - isApproved: bool (required, protected admin field)
+//
+// Collection: commercial_venues/{venueId}
+// Fields:
+//   - id: string (required, immutable, matches venueId, 1..128 chars)
+//   - ownerId: string (optional, immutable on update if present, 1..128 chars)
+//   - name: string (required, 1..140 chars)
+//   - city: string (required, in ['CPT', 'JHB'])
+//   - suburb: string (required, 1..100 chars)
+//   - address: string (required, 1..240 chars)
+//   - type: string (required, in ['verified_studio', 'partner_salon'])
+//   - isVerified: bool (required, only settable by techs.approve)
+//   - emptyChairFeeZar: int (required, >= 0)
+//
+// Collection: visual_contract_items/{itemId}
+// Fields:
+//   - id: string (required, immutable, matches itemId, 1..128 chars)
+//   - techId: string (required, immutable, 1..128 chars)
+//   - techDisplayName: string (required, 1..120 chars)
+//   - techTierBadge: string (required, in ['rising', 'verified', 'certified_pro'])
+//   - photoUrl: string (required, 1..500 chars)
+//   - title: string (required, 1..140 chars)
+//   - basePriceZar: int (required, > 0)
+//   - baseDurationMinutes: int (required, > 0)
+//   - city: string (required, in ['CPT', 'JHB'])
+//   - venueId: string (required, 1..128 chars)
+//   - venueName: string (required, 1..140 chars)
+//   - venueType: string (required, in ['verified_studio', 'partner_salon'])
+//   - styleCategory: string (required, 1..80 chars)
+//   - allowedModifiers: list (required, max 15 items)
+//
+// Collection: bookings/{bookingId}
+// Fields:
+//   - id: string (required, immutable, matches bookingId, 1..128 chars)
+//   - clientId: string (required, immutable, 1..128 chars)
+//   - techId: string (required, immutable, 1..128 chars)
+//   - visualContractItemId: string (required, immutable, 1..128 chars)
+//   - venueType: string (required, in ['verified_studio', 'partner_salon'])
+//   - venueId: string (required, 1..128 chars)
+//   - verifiedStudioId: string (optional, 1..128 chars)
+//   - partnerSalonChairSlotId: string (optional, 1..128 chars)
+//   - city: string (required, in ['CPT', 'JHB'])
+//   - status: string (required, in ['confirmed', 'in_progress', 'completed', 'cancelled_by_client', 'cancelled_by_tech', 'disputed'])
+//   - totalPriceZar: int (required, > 0)
+//   - totalDurationMinutes: int (required, > 0)
+//   - biometricVerified: bool (optional)
+//   - pinVerified: bool (optional)
+//   - liveCompletionPhotoUrl: string (optional, 1..500 chars)
+//   - completionPhotoSource: string (optional, must equal 'camera' when completed)
+//
+// Collection: booking_pins/{bookingId}
+// Fields:
+//   - bookingId: string (required, immutable, 1..128 chars)
+//   - clientId: string (required, immutable, 1..128 chars)
+//   - pinCode: string (required, 4 digits)
+//   - failedAttempts: int (required, >= 0)
+//
+// Collection: wallets/{walletId}, financial_ledger/{entryId}, payouts/{payoutId}
+//   - Strictly write-locked from all client SDKs (Cloud Functions / Admin SDK only).
+//
+// Collection: vouchers/{voucherId}
+// Fields:
+//   - id: string (required, immutable, 1..128 chars)
+//   - code: string (required, 3..32 chars)
+//   - discountAmountZar: int (required, > 0)
+//   - minSpendZar: int (required, >= 0)
+//   - maxUses: int (required, > 0)
+//   - currentUses: int (required, >= 0)
+//   - isActive: bool (required)
+//   - issuedForReason: string (required, 1..120 chars)
+//
+// Collection: store_products/{productId}
+// Fields:
+//   - id: string (required, immutable, 1..128 chars)
+//   - sku: string (required, 1..80 chars)
+//   - name: string (required, 1..160 chars)
+//   - category: string (required, 1..80 chars)
+//   - priceZar: int (required, > 0)
+//   - stockQuantity: int (required, >= 0)
+//   - syncSource: string (required, in ['csv_import', 'admin_manual', 'supplier_api'])
+//   - isAvailable: bool (required)
+//
+// Collection: store_orders/{orderId}
+// Fields:
+//   - id: string (required, immutable, 1..128 chars)
+//   - techUserId: string (required, immutable, 1..128 chars)
+//   - productIds: list of strings (required, 1..50 items)
+//   - totalAmountZar: int (required, > 0)
+//   - status: string (required, 1..40 chars)
+//   - pargoPickupPointCode: string (required, 1..64 chars)
+//
+// Collection: dispute_tickets/{ticketId}
+// Fields:
+//   - id: string (required, immutable, 1..128 chars)
+//   - bookingId: string (required, immutable, 1..128 chars)
+//   - clientId: string (required, immutable, 1..128 chars)
+//   - techId: string (required, immutable, 1..128 chars)
+//   - portfolioPhotoUrl: string (required, 1..500 chars)
+//   - techLiveCompletionPhotoUrl: string (required, 1..500 chars)
+//   - clientComplaintPhotoUrl: string (required, 1..500 chars)
+//   - clientReason: string (required, 1..800 chars)
+//   - status: string (required, in ['open', 'under_review', 'resolved_refund_client', 'resolved_payout_tech', 'resolved_split'])
+//   - resolutionNotes: string (optional, 0..800 chars)
+//
+// Collection: staff_audit_logs/{logId}
+// Fields:
+//   - id: string (required, immutable, 1..128 chars)
+//   - actorId: string (required, immutable, matches request.auth.uid, 1..128 chars)
+//   - actorUacGroup: string (required, immutable, 1..64 chars)
+//   - action: string (required, immutable, 1..120 chars)
+//   - targetId: string (required, immutable, 1..128 chars)
+//   - timestampIso: string (required, immutable, 1..64 chars)
+//   - notes: string (required, immutable, 0..500 chars)
+// ===============================================================
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ===============================================================
+    // Core Authentication & Dynamic UAC Helper Functions
+    // ===============================================================
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isAuthenticated() {
+      return isSignedIn();
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function currentUserDoc() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
+    }
+
+    // Enforces instant revocation: if a user document does not exist or has
+    // isActive set to false in the Admin Dashboard, access is immediately blocked.
+    function isActiveUser() {
+      return isSignedIn() &&
+        exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isActive == true;
+    }
+
+    // Evaluates granular permission keys from the Dynamic UAC Engine.
+    function hasPermission(permKey) {
+      return isActiveUser() && (
+        currentUserDoc().uacGroupId == 'super_admin' ||
+        (currentUserDoc().permissions is list && permKey in currentUserDoc().permissions) ||
+        (
+          exists(/databases/$(database)/documents/uac_groups/$(currentUserDoc().uacGroupId)) &&
+          get(/databases/$(database)/documents/uac_groups/$(currentUserDoc().uacGroupId)).data.isActive == true &&
+          permKey in get(/databases/$(database)/documents/uac_groups/$(currentUserDoc().uacGroupId)).data.permissions
+        )
+      );
+    }
+
+    function isActiveStaff() {
+      return isActiveUser() && (
+        currentUserDoc().uacGroupId in ['super_admin', 'ops_admin', 'support_agent', 'supplier_partner'] ||
+        hasPermission('uac.manage_roles') ||
+        hasPermission('disputes.view') ||
+        hasPermission('disputes.resolve') ||
+        hasPermission('techs.approve') ||
+        hasPermission('techs.award_pro') ||
+        hasPermission('vouchers.manage') ||
+        hasPermission('store.manage_inventory') ||
+        hasPermission('store.fulfil_orders') ||
+        hasPermission('wallet.credit_client') ||
+        hasPermission('ledger.export')
+      );
+    }
+
+    // ===============================================================
+    // Generic Schema & Validation Helpers
+    // ===============================================================
+
+    function hasRequiredFields(fields) {
+      return request.resource.data.keys().hasAll(fields);
+    }
+
+    function hasOnlyAllowedFields(fields) {
+      return request.resource.data.keys().hasOnly(fields);
+    }
+
+    function areImmutableFieldsUnchanged(fields) {
+      return !request.resource.data.diff(resource.data).affectedKeys().hasAny(fields);
+    }
+
+    function validString(val, minLen, maxLen) {
+      return val is string && val.size() >= minLen && val.size() <= maxLen;
+    }
+
+    function isValidEmail(email) {
+      return email is string &&
+        email.size() >= 3 &&
+        email.size() <= 160 &&
+        email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$");
+    }
+
+    function isValidCity(city) {
+      return city is string && city in ['CPT', 'JHB'];
+    }
+
+    function isValidVenueType(venueType) {
+      return venueType is string && venueType in ['verified_studio', 'partner_salon'];
+    }
+
+    function isValidTechTier(badge) {
+      return badge is string && badge in ['rising', 'verified', 'certified_pro'];
+    }
+
+    // ===============================================================
+    // Domain Validator Functions (Called on BOTH create and update)
+    // ===============================================================
+
+    function isValidUser(data, userId) {
+      return hasRequiredFields(['id', 'name', 'email', 'uacGroupId', 'city', 'permissions', 'isActive', 'walletBalanceZar']) &&
+        hasOnlyAllowedFields(['id', 'name', 'email', 'uacGroupId', 'city', 'permissions', 'isActive', 'walletBalanceZar']) &&
+        data.id == userId &&
+        validString(data.id, 1, 128) &&
+        validString(data.name, 1, 120) &&
+        isValidEmail(data.email) &&
+        data.uacGroupId in ['super_admin', 'ops_admin', 'support_agent', 'supplier_partner', 'salon_partner', 'tech', 'client'] &&
+        isValidCity(data.city) &&
+        data.permissions is list &&
+        data.permissions.size() <= 20 &&
+        data.isActive is bool &&
+        data.walletBalanceZar is number &&
+        data.walletBalanceZar >= 0;
+    }
+
+    function isValidUacGroup(data, groupId) {
+      return hasRequiredFields(['id', 'name', 'permissions', 'isActive']) &&
+        hasOnlyAllowedFields(['id', 'name', 'permissions', 'isActive']) &&
+        data.id == groupId &&
+        validString(data.id, 1, 64) &&
+        validString(data.name, 1, 120) &&
+        data.permissions is list &&
+        data.permissions.size() <= 30 &&
+        data.isActive is bool;
+    }
+
+    function isValidTechProfile(data, userId) {
+      return hasRequiredFields([
+          'userId', 'displayName', 'tierBadge', 'verifiedStudioId',
+          'city', 'bio', 'pendingStoreCreditZar', 'rating',
+          'completedBookingsCount', 'isApproved'
+        ]) &&
+        hasOnlyAllowedFields([
+          'userId', 'displayName', 'tierBadge', 'verifiedStudioId',
+          'city', 'bio', 'pendingStoreCreditZar', 'rating',
+          'completedBookingsCount', 'isApproved'
+        ]) &&
+        data.userId == userId &&
+        validString(data.userId, 1, 128) &&
+        validString(data.displayName, 1, 120) &&
+        isValidTechTier(data.tierBadge) &&
+        validString(data.verifiedStudioId, 1, 128) &&
+        isValidCity(data.city) &&
+        validString(data.bio, 0, 500) &&
+        data.pendingStoreCreditZar is number &&
+        data.pendingStoreCreditZar >= 0 &&
+        data.rating is number &&
+        data.rating >= 0 &&
+        data.rating <= 5 &&
+        data.completedBookingsCount is int &&
+        data.completedBookingsCount >= 0 &&
+        data.isApproved is bool;
+    }
+
+    function isValidCommercialVenue(data, venueId) {
+      return hasRequiredFields(['id', 'name', 'city', 'suburb', 'address', 'type', 'isVerified', 'emptyChairFeeZar']) &&
+        hasOnlyAllowedFields(['id', 'ownerId', 'name', 'city', 'suburb', 'address', 'type', 'isVerified', 'emptyChairFeeZar']) &&
+        data.id == venueId &&
+        validString(data.id, 1, 128) &&
+        (!('ownerId' in data) || validString(data.ownerId, 1, 128)) &&
+        validString(data.name, 1, 140) &&
+        isValidCity(data.city) &&
+        validString(data.suburb, 1, 100) &&
+        validString(data.address, 1, 240) &&
+        isValidVenueType(data.type) &&
+        data.isVerified is bool &&
+        data.emptyChairFeeZar is int &&
+        data.emptyChairFeeZar >= 0;
+    }
+
+    function isValidVisualContractItem(data, itemId) {
+      return hasRequiredFields([
+          'id', 'techId', 'techDisplayName', 'techTierBadge',
+          'photoUrl', 'title', 'basePriceZar', 'baseDurationMinutes',
+          'city', 'venueId', 'venueName', 'venueType',
+          'styleCategory', 'allowedModifiers'
+        ]) &&
+        hasOnlyAllowedFields([
+          'id', 'techId', 'techDisplayName', 'techTierBadge',
+          'photoUrl', 'title', 'basePriceZar', 'baseDurationMinutes',
+          'city', 'venueId', 'venueName', 'venueType',
+          'styleCategory', 'allowedModifiers'
+        ]) &&
+        data.id == itemId &&
+        validString(data.id, 1, 128) &&
+        validString(data.techId, 1, 128) &&
+        validString(data.techDisplayName, 1, 120) &&
+        isValidTechTier(data.techTierBadge) &&
+        validString(data.photoUrl, 1, 500) &&
+        validString(data.title, 1, 140) &&
+        data.basePriceZar is int &&
+        data.basePriceZar > 0 &&
+        data.baseDurationMinutes is int &&
+        data.baseDurationMinutes > 0 &&
+        isValidCity(data.city) &&
+        validString(data.venueId, 1, 128) &&
+        validString(data.venueName, 1, 140) &&
+        isValidVenueType(data.venueType) &&
+        validString(data.styleCategory, 1, 80) &&
+        data.allowedModifiers is list &&
+        data.allowedModifiers.size() <= 15;
+    }
+
+    function isValidBooking(data, bookingId) {
+      return hasRequiredFields([
+          'id', 'clientId', 'techId', 'visualContractItemId',
+          'venueType', 'venueId', 'city', 'status',
+          'totalPriceZar', 'totalDurationMinutes'
+        ]) &&
+        hasOnlyAllowedFields([
+          'id', 'clientId', 'techId', 'visualContractItemId',
+          'venueType', 'venueId', 'verifiedStudioId', 'partnerSalonChairSlotId',
+          'city', 'status', 'totalPriceZar', 'totalDurationMinutes',
+          'biometricVerified', 'pinVerified', 'liveCompletionPhotoUrl',
+          'completionPhotoSource', 'selectedModifierIds', 'scheduledAtIso'
+        ]) &&
+        data.id == bookingId &&
+        validString(data.id, 1, 128) &&
+        validString(data.clientId, 1, 128) &&
+        validString(data.techId, 1, 128) &&
+        validString(data.visualContractItemId, 1, 128) &&
+        isValidVenueType(data.venueType) &&
+        validString(data.venueId, 1, 128) &&
+        (
+          !('verifiedStudioId' in data) ||
+          validString(data.verifiedStudioId, 1, 128)
+        ) &&
+        (
+          !('partnerSalonChairSlotId' in data) ||
+          validString(data.partnerSalonChairSlotId, 1, 128)
+        ) &&
+        isValidCity(data.city) &&
+        data.status in [
+          'confirmed', 'in_progress', 'completed',
+          'cancelled_by_client', 'cancelled_by_tech', 'disputed'
+        ] &&
+        data.totalPriceZar is int &&
+        data.totalPriceZar > 0 &&
+        data.totalDurationMinutes is int &&
+        data.totalDurationMinutes > 0 &&
+        // Appointment Start Lock invariant: cannot be in_progress unless biometric + PIN verified
+        (
+          data.status != 'in_progress' ||
+          (data.biometricVerified == true && data.pinVerified == true)
+        ) &&
+        // Appointment Completion Lock invariant: cannot be completed without live camera photo
+        (
+          data.status != 'completed' ||
+          (
+            validString(data.liveCompletionPhotoUrl, 1, 500) &&
+            data.completionPhotoSource == 'camera'
+          )
+        );
+    }
+
+    function isValidVoucher(data, voucherId) {
+      return hasRequiredFields([
+          'id', 'code', 'discountAmountZar', 'minSpendZar',
+          'maxUses', 'currentUses', 'isActive', 'issuedForReason'
+        ]) &&
+        hasOnlyAllowedFields([
+          'id', 'code', 'discountAmountZar', 'minSpendZar',
+          'maxUses', 'currentUses', 'isActive', 'issuedForReason'
+        ]) &&
+        data.id == voucherId &&
+        validString(data.id, 1, 128) &&
+        validString(data.code, 3, 32) &&
+        data.discountAmountZar is int &&
+        data.discountAmountZar > 0 &&
+        data.minSpendZar is int &&
+        data.minSpendZar >= 0 &&
+        data.maxUses is int &&
+        data.maxUses > 0 &&
+        data.currentUses is int &&
+        data.currentUses >= 0 &&
+        data.isActive is bool &&
+        validString(data.issuedForReason, 1, 120);
+    }
+
+    function isValidStoreProduct(data, productId) {
+      return hasRequiredFields([
+          'id', 'sku', 'name', 'category',
+          'priceZar', 'stockQuantity', 'syncSource', 'isAvailable'
+        ]) &&
+        hasOnlyAllowedFields([
+          'id', 'sku', 'name', 'category',
+          'priceZar', 'stockQuantity', 'syncSource', 'isAvailable'
+        ]) &&
+        data.id == productId &&
+        validString(data.id, 1, 128) &&
+        validString(data.sku, 1, 80) &&
+        validString(data.name, 1, 160) &&
+        validString(data.category, 1, 80) &&
+        data.priceZar is int &&
+        data.priceZar > 0 &&
+        data.stockQuantity is int &&
+        data.stockQuantity >= 0 &&
+        data.syncSource in ['csv_import', 'admin_manual', 'supplier_api'] &&
+        data.isAvailable is bool;
+    }
+
+    function isValidStoreOrder(data, orderId) {
+      return hasRequiredFields([
+          'id', 'techUserId', 'productIds',
+          'totalAmountZar', 'status', 'pargoPickupPointCode'
+        ]) &&
+        hasOnlyAllowedFields([
+          'id', 'techUserId', 'productIds',
+          'totalAmountZar', 'status', 'pargoPickupPointCode'
+        ]) &&
+        data.id == orderId &&
+        validString(data.id, 1, 128) &&
+        validString(data.techUserId, 1, 128) &&
+        data.productIds is list &&
+        data.productIds.size() >= 1 &&
+        data.productIds.size() <= 50 &&
+        data.totalAmountZar is int &&
+        data.totalAmountZar > 0 &&
+        validString(data.status, 1, 40) &&
+        validString(data.pargoPickupPointCode, 1, 64);
+    }
+
+    function isValidDisputeTicket(data, ticketId) {
+      return hasRequiredFields([
+          'id', 'bookingId', 'clientId', 'techId',
+          'portfolioPhotoUrl', 'techLiveCompletionPhotoUrl',
+          'clientComplaintPhotoUrl', 'clientReason', 'status'
+        ]) &&
+        hasOnlyAllowedFields([
+          'id', 'bookingId', 'clientId', 'techId',
+          'portfolioPhotoUrl', 'techLiveCompletionPhotoUrl',
+          'clientComplaintPhotoUrl', 'clientReason', 'status',
+          'resolutionNotes'
+        ]) &&
+        data.id == ticketId &&
+        validString(data.id, 1, 128) &&
+        validString(data.bookingId, 1, 128) &&
+        validString(data.clientId, 1, 128) &&
+        validString(data.techId, 1, 128) &&
+        validString(data.portfolioPhotoUrl, 1, 500) &&
+        validString(data.techLiveCompletionPhotoUrl, 1, 500) &&
+        validString(data.clientComplaintPhotoUrl, 1, 500) &&
+        validString(data.clientReason, 1, 800) &&
+        data.status in [
+          'open', 'under_review',
+          'resolved_refund_client', 'resolved_payout_tech', 'resolved_split'
+        ] &&
+        (!('resolutionNotes' in data) || validString(data.resolutionNotes, 0, 800));
+    }
+
+    function isValidStaffAuditLog(data, logId) {
+      return hasRequiredFields([
+          'id', 'actorId', 'actorUacGroup',
+          'action', 'targetId', 'timestampIso', 'notes'
+        ]) &&
+        hasOnlyAllowedFields([
+          'id', 'actorId', 'actorUacGroup',
+          'action', 'targetId', 'timestampIso', 'notes'
+        ]) &&
+        data.id == logId &&
+        validString(data.id, 1, 128) &&
+        data.actorId == request.auth.uid &&
+        validString(data.actorId, 1, 128) &&
+        validString(data.actorUacGroup, 1, 64) &&
+        validString(data.action, 1, 120) &&
+        validString(data.targetId, 1, 128) &&
+        validString(data.timestampIso, 1, 64) &&
+        validString(data.notes, 0, 500);
+    }
+
+    // ===============================================================
+    // 1. Dynamic UAC Groups & Instant Revocation
+    // ===============================================================
+
+    match /users/{userId} {
+      // PII protection: only readable by the active owner or authorised UAC / tech approval admins.
+      allow read: if (isOwner(userId) && isActiveUser()) ||
+        hasPermission('uac.manage_roles') ||
+        hasPermission('techs.approve');
+
+      // On create: self-registration allows only non-privileged initial groups ('client', 'tech', 'salon_partner')
+      // with zero wallet balance, empty custom permissions, and active status.
+      allow create: if isValidUser(request.resource.data, userId) && (
+        (
+          isOwner(userId) &&
+          request.resource.data.uacGroupId in ['client', 'tech', 'salon_partner'] &&
+          request.resource.data.permissions.size() == 0 &&
+          request.resource.data.isActive == true &&
+          request.resource.data.walletBalanceZar == 0
+        ) ||
+        hasPermission('uac.manage_roles')
+      );
+
+      // On update: self cannot modify uacGroupId, permissions, isActive, or walletBalanceZar.
+      // Only users with uac.manage_roles can update uacGroupId, permissions, or isActive,
+      // and walletBalanceZar can never be modified from client SDKs.
+      allow update: if isValidUser(request.resource.data, userId) &&
+        areImmutableFieldsUnchanged(['id', 'walletBalanceZar']) && (
+          (
+            isOwner(userId) &&
+            isActiveUser() &&
+            areImmutableFieldsUnchanged(['uacGroupId', 'permissions', 'isActive', 'walletBalanceZar'])
+          ) ||
+          hasPermission('uac.manage_roles')
+        );
+
+      allow delete: if false;
+    }
+
+    match /uac_groups/{groupId} {
+      allow read: if isActiveUser();
+      allow create, update: if hasPermission('uac.manage_roles') &&
+        isValidUacGroup(request.resource.data, groupId);
+      allow delete: if false;
+    }
+
+    // ===============================================================
+    // 2. Nail Technician Profiles & Merit Badges
+    // ===============================================================
+
+    match /tech_profiles/{userId} {
+      allow read: if isActiveUser();
+
+      // Techs can create their initial profile only at the entry 'rising' tier,
+      // with zero pending store credit, zero completed bookings, and unapproved status
+      // until verified by an admin.
+      allow create: if isValidTechProfile(request.resource.data, userId) && (
+        (
+          isOwner(userId) &&
+          isActiveUser() &&
+          request.resource.data.tierBadge == 'rising' &&
+          request.resource.data.pendingStoreCreditZar == 0 &&
+          request.resource.data.completedBookingsCount == 0 &&
+          request.resource.data.rating == 5.0 &&
+          request.resource.data.isApproved == false
+        ) ||
+        hasPermission('techs.approve') ||
+        hasPermission('techs.award_pro')
+      );
+
+      // Techs can update their own displayName, bio, verifiedStudioId, and city,
+      // but cannot self-promote tierBadge or modify pendingStoreCreditZar, rating,
+      // completedBookingsCount, or isApproved.
+      allow update: if isValidTechProfile(request.resource.data, userId) &&
+        areImmutableFieldsUnchanged(['userId']) && (
+          (
+            isOwner(userId) &&
+            isActiveUser() &&
+            areImmutableFieldsUnchanged([
+              'tierBadge', 'pendingStoreCreditZar', 'rating',
+              'completedBookingsCount', 'isApproved'
+            ])
+          ) ||
+          (
+            (hasPermission('techs.approve') || hasPermission('techs.award_pro')) &&
+            areImmutableFieldsUnchanged(['pendingStoreCreditZar', 'completedBookingsCount'])
+          )
+        );
+
+      allow delete: if false;
+    }
+
+    // ===============================================================
+    // 3. Commercial Venues (Strict Venue-Only Policy / Zero House Calls)
+    // ===============================================================
+
+    match /commercial_venues/{venueId} {
+      allow read: if isActiveUser();
+
+      // Salon partners and techs can submit a commercial venue with isVerified == false,
+      // while admins with techs.approve can create and verify venues directly.
+      allow create: if isValidCommercialVenue(request.resource.data, venueId) && (
+        hasPermission('techs.approve') ||
+        (
+          isActiveUser() &&
+          currentUserDoc().uacGroupId in ['salon_partner', 'tech'] &&
+          request.resource.data.isVerified == false &&
+          (!('ownerId' in request.resource.data) || request.resource.data.ownerId == request.auth.uid)
+        )
+      );
+
+      // Only users with techs.approve can set or modify isVerified.
+      allow update: if isValidCommercialVenue(request.resource.data, venueId) &&
+        areImmutableFieldsUnchanged(['id', 'ownerId']) && (
+          hasPermission('techs.approve') ||
+          (
+            isActiveUser() &&
+            'ownerId' in resource.data &&
+            resource.data.ownerId == request.auth.uid &&
+            areImmutableFieldsUnchanged(['isVerified'])
+          )
+        );
+
+      allow delete: if false;
+    }
+
+    // ===============================================================
+    // 4. Visual Contract Portfolio Items
+    // ===============================================================
+
+    match /visual_contract_items/{itemId} {
+      allow read: if isActiveUser();
+
+      allow create: if isValidVisualContractItem(request.resource.data, itemId) && (
+        (
+          isActiveUser() &&
+          request.resource.data.techId == request.auth.uid
+        ) ||
+        hasPermission('techs.approve')
+      );
+
+      allow update: if isValidVisualContractItem(request.resource.data, itemId) &&
+        areImmutableFieldsUnchanged(['id', 'techId']) && (
+          (
+            isActiveUser() &&
+            resource.data.techId == request.auth.uid &&
+            request.resource.data.techId == request.auth.uid
+          ) ||
+          hasPermission('techs.approve')
+        );
+
+      allow delete: if (isActiveUser() && resource.data.techId == request.auth.uid) ||
+        hasPermission('techs.approve');
+    }
+
+    // ===============================================================
+    // 5. Bookings & 4-Digit Client PIN Secrecy
+    // ===============================================================
+
+    match /bookings/{bookingId} {
+      allow read: if isActiveUser() && (
+        resource.data.clientId == request.auth.uid ||
+        resource.data.techId == request.auth.uid ||
+        hasPermission('disputes.view') ||
+        hasPermission('disputes.resolve') ||
+        hasPermission('ledger.export')
+      );
+
+      allow create: if isActiveUser() &&
+        isValidBooking(request.resource.data, bookingId) &&
+        request.resource.data.clientId == request.auth.uid &&
+        request.resource.data.status == 'confirmed';
+
+      allow update: if isActiveUser() &&
+        isValidBooking(request.resource.data, bookingId) &&
+        areImmutableFieldsUnchanged([
+          'id', 'clientId', 'techId', 'visualContractItemId',
+          'venueType', 'venueId', 'city', 'totalPriceZar', 'totalDurationMinutes'
+        ]) && (
+          resource.data.clientId == request.auth.uid ||
+          resource.data.techId == request.auth.uid ||
+          hasPermission('disputes.resolve')
+        );
+
+      allow delete: if false;
+    }
+
+    match /booking_pins/{bookingId} {
+      // Strictly readable ONLY by the client who owns the booking; never readable by the tech.
+      allow read: if isActiveUser() && resource.data.clientId == request.auth.uid;
+      // Generated and verified exclusively via backend Cloud Functions / Admin SDK.
+      allow write: if false;
+    }
+
+    // ===============================================================
+    // 6. Closed-Loop Wallet, Financial Ledger & Payouts
+    // ===============================================================
+
+    match /wallets/{userId} {
+      allow read: if (isOwner(userId) && isActiveUser()) ||
+        hasPermission('ledger.export') ||
+        hasPermission('wallet.credit_client');
+      allow write: if false;
+    }
+
+    match /financial_ledger/{entryId} {
+      allow read: if hasPermission('ledger.export') ||
+        (isActiveUser() && resource.data.userId == request.auth.uid);
+      allow write: if false;
+    }
+
+    match /payouts/{payoutId} {
+      allow read: if hasPermission('ledger.export') ||
+        (isActiveUser() && resource.data.techId == request.auth.uid);
+      allow write: if false;
+    }
+
+    // ===============================================================
+    // 7. Vouchers, Supply Store, Disputes & Immutable Staff Audit Logs
+    // ===============================================================
+
+    match /vouchers/{voucherId} {
+      allow read: if isActiveUser();
+      allow create, update: if hasPermission('vouchers.manage') &&
+        isValidVoucher(request.resource.data, voucherId);
+      allow delete: if false;
+    }
+
+    match /store_products/{productId} {
+      allow read: if isActiveUser();
+      allow create, update: if hasPermission('store.manage_inventory') &&
+        isValidStoreProduct(request.resource.data, productId);
+      allow delete: if false;
+    }
+
+    match /store_orders/{orderId} {
+      allow read: if isActiveUser() && (
+        resource.data.techUserId == request.auth.uid ||
+        hasPermission('store.fulfil_orders') ||
+        hasPermission('store.manage_inventory')
+      );
+
+      allow create: if isActiveUser() &&
+        isValidStoreOrder(request.resource.data, orderId) &&
+        request.resource.data.techUserId == request.auth.uid &&
+        request.resource.data.status == 'pending_fulfilment';
+
+      allow update: if hasPermission('store.fulfil_orders') &&
+        isValidStoreOrder(request.resource.data, orderId) &&
+        areImmutableFieldsUnchanged(['id', 'techUserId', 'productIds', 'totalAmountZar']);
+
+      allow delete: if false;
+    }
+
+    match /dispute_tickets/{ticketId} {
+      allow read: if isActiveUser() && (
+        resource.data.clientId == request.auth.uid ||
+        resource.data.techId == request.auth.uid ||
+        hasPermission('disputes.view') ||
+        hasPermission('disputes.resolve')
+      );
+
+      allow create: if isActiveUser() &&
+        isValidDisputeTicket(request.resource.data, ticketId) &&
+        request.resource.data.clientId == request.auth.uid &&
+        request.resource.data.status == 'open';
+
+      allow update: if hasPermission('disputes.resolve') &&
+        isValidDisputeTicket(request.resource.data, ticketId) &&
+        areImmutableFieldsUnchanged([
+          'id', 'bookingId', 'clientId', 'techId',
+          'portfolioPhotoUrl', 'techLiveCompletionPhotoUrl',
+          'clientComplaintPhotoUrl', 'clientReason'
+        ]);
+
+      allow delete: if false;
+    }
+
+    match /staff_audit_logs/{logId} {
+      allow read: if hasPermission('uac.manage_roles') ||
+        hasPermission('ledger.export');
+
+      allow create: if isActiveStaff() &&
+        isValidStaffAuditLog(request.resource.data, logId);
+
+      // Audit logs are strictly immutable: no updates or deletions are ever permitted.
+      allow update, delete: if false;
+    }
+
+    // ===============================================================
+    // Default Deny Fallback
+    // ===============================================================
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
