@@ -10,7 +10,7 @@
 ### Item 1: Architecture Setup and Quality Standards
 > [!IMPORTANT]
 > **RIO'S FOCUS (JHB):**
-> - [ ] **Initialise the Flutter & Backend Project:** Set up the multi-platform Flutter app (iOS, Android, and Web Admin) and configure Firebase/Supabase authentication, database environments, and user role guards (`client`, `tech`, `salon_partner`, `admin`).
+> - [x] **Initialise the Flutter & Backend Project:** Set up the multi-platform Flutter app (iOS, Android, and Web Admin) and configure Firebase/Supabase authentication, database environments, and user role guards (`client`, `tech`, `salon_partner`, `admin`).
 
 * **Aqeelah's Focus (CPT):**
   - [ ] Set up the Master Research Google Sheet (*Nail Techs* and *Independent Salons* tabs for CPT/JHB) and write the 5 to 7 non-negotiable quality rules for the "Certified Pro" checklist. *(Growth: Self-Belief & Authority)*
@@ -20,7 +20,7 @@
 ### Item 2: Core Database Models and First Research Batch
 > [!IMPORTANT]
 > **RIO'S FOCUS (JHB):**
-> - [ ] **Build Core Database Schemas:** Create schemas and security rules for Users, Tech Profiles, Verified Commercial Venues, and Visual Contract Portfolio items (image URL, fixed base price, base duration in minutes, allowed modifiers).
+> - [x] **Build Core Database Schemas:** Create schemas and security rules for Users, Tech Profiles, Verified Commercial Venues, and Visual Contract Portfolio items (image URL, fixed base price, base duration in minutes, allowed modifiers).
 
 * **Aqeelah's Focus (CPT):**
   - [ ] Find 5 independent nail techs in CPT on Instagram and TikTok and log their handles, prices, and booking methods. *(Growth: Independent Thinking & Preparation)*
@@ -30,7 +30,7 @@
 ### Item 3: Auth Screens and JHB Tech Scouting
 > [!IMPORTANT]
 > **RIO'S FOCUS (JHB):**
-> - [ ] **Build Auth Screens & Scout 5 JHB Techs:** Implement the login, registration, and role onboarding screens, and add 5 independent nail techs in JHB to the shared research sheet.
+> - [x] **Build Auth Screens & Scout 5 JHB Techs:** Implement the login, registration, and role onboarding screens, and add 5 independent nail techs in JHB to the shared research sheet.
 
 * **Aqeelah's Focus (CPT):**
   - [ ] Find 5 more CPT nail techs and document 1 annoying flaw in each of their current booking flows. *(Growth: Seeing Business Flaws Clearly)*
@@ -40,7 +40,7 @@
 ### Item 4: Visual Contract Card UI
 > [!IMPORTANT]
 > **RIO'S FOCUS (JHB):**
-> - [ ] **Build the Visual Contract Card Component:** Create the signature portfolio card UI displaying the tech's nail photo, hard-coded base price, exact appointment duration, tier badge, and verified venue tag.
+> - [x] **Build the Visual Contract Card Component:** Create the signature portfolio card UI displaying the tech's nail photo, hard-coded base price, exact appointment duration, tier badge, and verified venue tag.
 
 * **Aqeelah's Focus (CPT):**
   - [ ] Mystery-shop 2 nail techs on WhatsApp or Instagram to time how long a standard price and slot enquiry takes. *(Growth: Conviction in Our Idea)*
@@ -50,7 +50,7 @@
 ### Item 5: Visual Contract Discovery Feed and JHB Salons
 > [!IMPORTANT]
 > **RIO'S FOCUS (JHB):**
-> - [ ] **Build the Discovery Feed & Scout 3 JHB Salons:** Build the scrollable Visual Contract discovery feed with CPT and JHB filters, and add 3 independent salons in JHB (with quiet mid-week hours) to the shared sheet.
+> - [x] **Build the Discovery Feed & Scout 3 JHB Salons:** Build the scrollable Visual Contract discovery feed with CPT and JHB filters, and add 3 independent salons in JHB (with quiet mid-week hours) to the shared sheet.
 
 * **Aqeelah's Focus (CPT):**
   - [ ] Find 5 independent salons in CPT on Google Maps and check their "Popular Times" graph for quiet mid-week hours. *(Growth: Spotting Business Opportunities)*
@@ -63,7 +63,7 @@
 ### Item 6: Booking Detail Screen and Dynamic Modifiers
 > [!IMPORTANT]
 > **RIO'S FOCUS (JHB):**
-> - [ ] **Build the Booking & Modifier Engine:** Create the Visual Contract booking screen where clients toggle optional add-ons defined by Aqeelah (*Soak-Off / Removal*, *Extra Length*, *Nail Repair*), dynamically recalculating total price and duration.
+> - [x] **Build the Booking & Modifier Engine:** Create the Visual Contract booking screen where clients toggle optional add-ons defined by Aqeelah (*Soak-Off / Removal*, *Extra Length*, *Nail Repair*), dynamically recalculating total price and duration.
 
 * **Aqeelah's Focus (CPT):**
   - [ ] Finalise the standard list of add-on modifiers and fair time additions based on her CPT market research. *(Growth: Decision-Making & Ownership)*
@@ -73,7 +73,7 @@
 ### Item 7: Tech Portfolio Upload Flow
 > [!IMPORTANT]
 > **RIO'S FOCUS (JHB):**
-> - [ ] **Build the Tech Portfolio Upload Screen:** Build the flow for nail techs to upload a nail photo, set the fixed price and duration, and attach optional add-on toggles.
+> - [x] **Build the Tech Portfolio Upload Screen:** Build the flow for nail techs to upload a nail photo, set the fixed price and duration, and attach optional add-on toggles.
 
 * **Aqeelah's Focus (CPT):**
   - [ ] Set up the official ABE Instagram and TikTok accounts, write the 3-line bio, and plan the "Founding Techs" story highlight. *(Growth: Taking Pride in Your Brand)*
@@ -83,7 +83,7 @@
 ### Item 8: Prototype Walkthrough and UI Refinement
 > [!IMPORTANT]
 > **RIO'S FOCUS (JHB):**
-> - [ ] **Demo Prototype & Refine UI:** Walk Aqeelah through the clickable Stage 1 and 2 app screens and refine the layout and copy based on her feedback.
+> - [x] **Demo Prototype & Refine UI:** Walk Aqeelah through the clickable Stage 1 and 2 app screens and refine the layout and copy based on her feedback.
 
 * **Aqeelah's Focus (CPT):**
   - [ ] Test the first clickable prototype and provide honest feedback from a client and nail tech perspective. *(Growth: Leadership Feedback)*

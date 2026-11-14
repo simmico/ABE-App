@@ -1,14 +1,14 @@
 # DEV_STATE.md: Living Technical State & Multi-Chat Handoff
 
-> **Purpose:** Every coding chat (`Chat 1` through `Chat 5`) and **Google Jules** reads this file first to see what has already been built and updates this file whenever a Roadmap Item is completed.
+> **Purpose:** Every coding chat (`Chat 1` through `Chat 5`) and all Antigravity background subagents read this file first to see what has already been built and update this file whenever a Roadmap Item is completed.
 
 ---
 
 ## 1. Current Overall Build Status
-- **Active Stage:** Stage 1 (Foundation, Database & Discovery Feed)
-- **Active Chat File:** `chats/CHAT_1_FOUNDATION.md`
-- **Next Sub-Task to Execute:** `Sub-task 1.1` (Initialise Flutter multi-platform app & folder structure)
-- **Completed Roadmap Items (Rio's Track):** None yet (`0 / 18` completed)
+- **Active Stage:** Stage 2 Completed (Ready for Stage 3: `chats/CHAT_3_CALENDAR_AND_VENUE.md`)
+- **Active Chat File:** `chats/CHAT_2_BOOKING.md` (All Stage 2 sub-tasks `6.1` to `8.3` completed)
+- **Next Sub-Task to Execute:** `Sub-task 9.1` in `chats/CHAT_3_CALENDAR_AND_VENUE.md`
+- **Completed Roadmap Items (Rio's Track):** `Item 1`, `Item 2`, `Item 3`, `Item 4`, `Item 5`, `Item 6`, `Item 7`, `Item 8` (`8 / 18` completed)
 
 ---
 
@@ -43,14 +43,14 @@ All agents working in this workspace have direct access to these installed local
 ## 4. Completed Architecture & Database Log
 *(Updated automatically by each chat as items are completed)*
 - [x] **Founder Hub (`founder-hub/`)**: Built and configured for Cloudflare deployment.
-- [ ] **Item 1:** Flutter & Backend Workspace Initialisation
-- [ ] **Item 2:** Core Database Schemas & Security Rules
-- [ ] **Item 3:** Auth Screens & Role Onboarding
-- [ ] **Item 4:** Signature Visual Contract Card UI
-- [ ] **Item 5:** Visual Contract Discovery Feed (CPT & JHB)
-- [ ] **Item 6:** Booking Screen & Dynamic Modifier Calculator
-- [ ] **Item 7:** Tech Portfolio Upload Flow
-- [ ] **Item 8:** Stage 1 & 2 Prototype Review Refinements
+- [x] **Item 1:** Flutter & Backend Workspace Initialisation (`abe_app/`, `BrandConfig`, `AbeTheme`, `UacPermissionMatrix`, `FeatureFlagsService`)
+- [x] **Item 2:** Core Database Schemas & Security Rules (`AbeUser`, `UacGroup`, `TechProfile`, `CommercialVenue`, `VisualContractItem`, `VoucherCode`, `StoreProduct`, `StoreOrder`, `DisputeTicket`, `StaffAuditLog`, `InputSanitiser`, `firestore.rules`)
+- [x] **Item 3:** Auth Screens & Role Onboarding (`WelcomeAuthScreen`, `RoleCityOnboardingScreen` for `CPT` and `JHB`)
+- [x] **Item 4:** Signature Visual Contract Card UI (`VisualContractCard` + widget tests)
+- [x] **Item 5:** Visual Contract Discovery Feed (`DiscoveryFeedScreen` with `CPT`/`JHB`, Tier Badge, and Price Range filters + `DiscoveryFeedSkeletonCard`)
+- [x] **Item 6:** Booking Screen & Dynamic Modifier Calculator (`BookingModifier`, `BookingPriceQuote`, `BookingCalculatorService`, `VisualContractDetailScreen`)
+- [x] **Item 7:** Tech Portfolio Upload Flow (`TechPortfolioUploadScreen`, `VisualContractRepository`)
+- [x] **Item 8:** Stage 1 & 2 Prototype Review Refinements (`AbeApp` unified prototype navigation, `abe-design-agent` & `flutter_a11y_agent` audit refinements)
 - [ ] **Item 9:** Tech Availability Calendar & Slot Engine
 - [ ] **Item 10:** Strict Venue-Only Booking Lock (Zero House Calls)
 - [ ] **Item 11:** Grading & Tier Badge Engine
