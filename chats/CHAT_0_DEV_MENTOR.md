@@ -7,8 +7,8 @@
 ---
 
 ## Current Checkpoint
-- **Active Step:** `Step 0.2` (Main App Git Repository & Branch Strategy: set up the Git structure with clean `main` and `dev` branches so Google Jules can open Pull Requests cleanly).
-- **Last Completed Step:** `Step 0.1` (Verified and installed local Flutter `3.50.0`, Dart `3.14.0`, Git `2.56.0`, Node `v22.14.0`, and Firebase CLI `15.36.0`).
+- **Active Step:** `Step 0.3` & `Step 0.4` (Connect Google Jules `jules.google.com` to `simmico/ABE-App` with a starter task, and review the Specialist Agents workflow for Chats 1 to 5).
+- **Last Completed Step:** `Step 0.2` (Initialised root Git repository with `.gitignore`, linked remote `https://github.com/simmico/ABE-App.git`, and pushed `main` and `dev` branches).
 
 ---
 
@@ -23,7 +23,7 @@
 - [x] **Step 0.1: Verify Local Dev Toolchain**
   - Check whether `flutter`, `dart`, `git`, `node`, and `firebase` CLIs are installed and working on Rio's Windows machine.
   - Guide Rio through installing or configuring any missing tool cleanly.
-- [ ] **Step 0.2: Main App Git Repository & Branch Strategy**
+- [x] **Step 0.2: Main App Git Repository & Branch Strategy**
   - Help Rio set up the Git structure for the main app (separate from or alongside `founder-hub`) with a clean `main` branch and `dev` branch so **Google Jules** can open Pull Requests cleanly.
 - [ ] **Step 0.3: Connecting Google Jules (`jules.google.com`)**
   - Walk Rio through connecting Google Jules to his GitHub repository, showing him how Jules automatically reads `AGENTS.md` and `DEV_STATE.md`, and generating his first test GitHub Issue using `.agents/skills/abe-jules-delegation/SKILL.md`.
@@ -36,4 +36,5 @@
 ---
 
 ## Completed Files & Architecture Log
-- `chats/CHAT_0_DEV_MENTOR.md`: Completed Step 0.1 toolchain installation (`Flutter 3.50.0`, `Dart 3.14.0`, `Firebase CLI 15.36.0`, `Git 2.56.0`, `Node v22.14.0`) and updated checkpoint to Step 0.2.
+- `chats/CHAT_0_DEV_MENTOR.md`: Completed Step 0.1 toolchain installation (`Flutter 3.50.0`, `Dart 3.14.0`, `Firebase CLI 15.36.0`, `Git 2.56.0`, `Node v22.14.0`) and Step 0.2 Git repository setup (`main` and `dev` pushed to `https://github.com/simmico/ABE-App.git`).
+- `.gitignore`: Created root `.gitignore` excluding `founder-hub/` (preserving its separate Cloudflare Pages repo), Flutter build artefacts, and secret `.env` files.
