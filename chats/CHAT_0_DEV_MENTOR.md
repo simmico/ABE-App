@@ -7,8 +7,8 @@
 ---
 
 ## Current Checkpoint
-- **Active Step:** `CHAT 0 COMPLETE` (All 4 steps completed. Next: Open Chat 1 and run `Read chats/CHAT_1_FOUNDATION.md and execute from the current checkpoint.`).
-- **Last Completed Step:** `Step 0.3` & `Step 0.4` (Explained Google Jules workflow + specialist agents for Chats 1 to 5; Jules connection deferred until Rio's new Google One account is active).
+- **Active Step:** `CHAT 0 COMPLETE` (All 4 steps completed; Google Jules replaced by native Antigravity background subagents. Next: Open Chat 1 and run `Read chats/CHAT_1_FOUNDATION.md and execute from the current checkpoint.`).
+- **Last Completed Step:** `Step 0.3` & `Step 0.4` (Replaced external Google Jules queue across Chats 1 to 4 with Antigravity native background subagents via `invoke_subagent`).
 
 ---
 

@@ -50,6 +50,7 @@
 
 ---
 
-## Google Jules Offload Queue (Stage 3)
-- **Jules Task 3A:** Write unit tests for `SlotGeneratorService` testing 60-min, 90-min, and 135-min bookings across lunch breaks and existing appointments.
-- **Jules Task 3B:** Write security rule unit tests verifying that any booking payload without a valid commercial `venueId` is rejected.
+## Background Subagent Offload Queue (Stage 3)
+*(Executed automatically in the background via `invoke_subagent` inside Antigravity; replaces Google Jules)*
+- **Background Task 3A:** Write unit tests for `SlotGeneratorService` testing 60-min, 90-min, and 135-min bookings across lunch breaks and existing appointments.
+- **Background Task 3B:** Write security rule unit tests verifying that any booking payload without a valid commercial `venueId` is rejected.

@@ -58,7 +58,7 @@ Before writing application code, read and activate:
 ### Roadmap Item 5: Visual Contract Discovery Feed (CPT & JHB)
 - [ ] **Sub-task 5.1:** Build the `DiscoveryFeedScreen` (`lib/features/portfolio/presentation/screens/discovery_feed_screen.dart`) with instant filtering by City (`CPT` / `JHB`), Tier Badge, and Price Range, seeded with realistic CPT and JHB mock nail portfolios for immediate preview.
 - [ ] **Sub-task 5.2:** Run `dart analyze` and `flutter test`, and audit accessibility with `flutter_a11y_agent`.
-- [ ] **Sub-task 5.3:** Mark **Item 5** completed in `DEV_STATE.md`, `ROADMAP_TECH.md`, `founder-hub/data/roadmap.json`, and `founder-hub/js/sync.js`, and generate Google Jules tasks below.
+- [ ] **Sub-task 5.3:** Mark **Item 5** completed in `DEV_STATE.md`, `ROADMAP_TECH.md`, `founder-hub/data/roadmap.json`, and `founder-hub/js/sync.js`, and delegate the Stage 1 Background Subagent Offload Queue below via `invoke_subagent`.
 
 ---
 
@@ -68,7 +68,7 @@ Before writing application code, read and activate:
 
 ---
 
-## Google Jules Offload Queue (Stage 1)
-*(Ready-to-paste GitHub Issues for Rio to assign to Google Jules once Sub-task 2.1 is done)*
-- **Jules Task 1A:** Write comprehensive unit tests for `AbeUser`, `TechProfile`, `CommercialVenue`, and `VisualContractItem` JSON serialisation and price/duration edge cases.
-- **Jules Task 1B:** Build shimmer loading skeleton cards and empty-state illustrations for `DiscoveryFeedScreen` matching the Dusty Rose & Cream theme.
+## Background Subagent Offload Queue (Stage 1)
+*(Executed automatically in the background via `invoke_subagent` inside Antigravity; replaces Google Jules)*
+- **Background Task 1A:** Write comprehensive unit tests for `AbeUser`, `TechProfile`, `CommercialVenue`, and `VisualContractItem` JSON serialisation and price/duration edge cases.
+- **Background Task 1B:** Build shimmer loading skeleton cards and empty-state illustrations for `DiscoveryFeedScreen` matching the Dusty Rose & Cream theme.

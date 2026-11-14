@@ -1,6 +1,6 @@
 # DEV_STATE.md: Living Technical State & Multi-Chat Handoff
 
-> **Purpose:** Every coding chat (`Chat 1` through `Chat 5`) and **Google Jules** reads this file first to see what has already been built and updates this file whenever a Roadmap Item is completed.
+> **Purpose:** Every coding chat (`Chat 1` through `Chat 5`) and all Antigravity background subagents read this file first to see what has already been built and update this file whenever a Roadmap Item is completed.
 
 ---
 

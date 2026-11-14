@@ -62,6 +62,7 @@
 
 ---
 
-## Google Jules Offload Queue (Stage 4)
-- **Jules Task 4A:** Write exhaustive unit tests for `WalletAndLedgerService` testing the 15% platform fee, 75%/25% client late-cancellation split, 100% + voucher tech cancellation recovery, and instant cash-out fee math.
-- **Jules Task 4B:** Build CSV export and filtering for the Admin Ledger & Dispute History table.
+## Background Subagent Offload Queue (Stage 4)
+*(Executed automatically in the background via `invoke_subagent` inside Antigravity; replaces Google Jules)*
+- **Background Task 4A:** Write exhaustive unit tests for `WalletAndLedgerService` testing the 15% platform fee, 75%/25% client late-cancellation split, 100% + voucher tech cancellation recovery, and instant cash-out fee math.
+- **Background Task 4B:** Build CSV export and filtering for the Admin Ledger & Dispute History table.

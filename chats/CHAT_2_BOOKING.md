@@ -45,6 +45,7 @@
 
 ---
 
-## Google Jules Offload Queue (Stage 2)
-- **Jules Task 2A:** Add client-side image aspect-ratio cropping (`4:5`) and compression helper for `TechPortfolioUploadScreen`.
-- **Jules Task 2B:** Write edge-case unit tests for multi-modifier combinations and currency formatting (`R1,250`).
+## Background Subagent Offload Queue (Stage 2)
+*(Executed automatically in the background via `invoke_subagent` inside Antigravity; replaces Google Jules)*
+- **Background Task 2A:** Add client-side image aspect-ratio cropping (`4:5`) and compression helper for `TechPortfolioUploadScreen`.
+- **Background Task 2B:** Write edge-case unit tests for multi-modifier combinations and currency formatting (`R1,250`).
