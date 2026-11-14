@@ -461,6 +461,7 @@ class _DiscoveryFeedScreenState extends State<DiscoveryFeedScreen> {
           ),
           Wrap(
             spacing: 6,
+            runSpacing: 8,
             children: <Widget>[
               for (final cap in priceCaps)
                 _FilterPill(

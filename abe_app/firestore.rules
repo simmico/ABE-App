@@ -11,62 +11,62 @@ rules_version = '2';
 // Collection: users/{userId}
 // Fields:
 //   - id: string (required, immutable, matches userId, 1..128 chars)
-//   - name: string (required, 1..120 chars)
+//   - name: string (required, clean text, 1..120 chars)
 //   - email: string (required, valid email, 3..160 chars)
 //   - uacGroupId: string (required, in ['super_admin', 'ops_admin', 'support_agent', 'supplier_partner', 'salon_partner', 'tech', 'client'])
 //   - city: string (required, in ['CPT', 'JHB'])
 //   - permissions: list of strings (required, max 20 items, granular UAC overrides)
 //   - isActive: bool (required, instant revocation switch)
-//   - walletBalanceZar: number (required, >= 0, read-only for self, closed-loop float)
+//   - walletBalanceZar: number (required, 0..1000000, read-only for self, closed-loop)
 //
 // Collection: uac_groups/{groupId}
 // Fields:
 //   - id: string (required, immutable, matches groupId, 1..64 chars)
-//   - name: string (required, 1..120 chars)
+//   - name: string (required, clean text, 1..120 chars)
 //   - permissions: list of strings (required, max 30 items)
 //   - isActive: bool (required)
 //
 // Collection: tech_profiles/{userId}
 // Fields:
 //   - userId: string (required, immutable, matches userId, 1..128 chars)
-//   - displayName: string (required, 1..120 chars)
+//   - displayName: string (required, clean text, 1..120 chars)
 //   - tierBadge: string (required, in ['rising', 'verified', 'certified_pro'])
-//   - verifiedStudioId: string (required, 1..128 chars, Strict Venue-Only Policy)
+//   - verifiedStudioId: string (required, commercial-clean, 1..128 chars, Strict Venue-Only Policy)
 //   - city: string (required, in ['CPT', 'JHB'])
-//   - bio: string (required, 0..500 chars)
-//   - pendingStoreCreditZar: number (required, >= 0, protected system field)
+//   - bio: string (required, clean text, 0..500 chars)
+//   - pendingStoreCreditZar: number (required, 0..1000000, protected system field)
 //   - rating: number (required, 0..5, protected system field)
-//   - completedBookingsCount: int (required, >= 0, protected system field)
+//   - completedBookingsCount: int (required, 0..1000000, protected system field)
 //   - isApproved: bool (required, protected admin field)
 //
 // Collection: commercial_venues/{venueId}
 // Fields:
 //   - id: string (required, immutable, matches venueId, 1..128 chars)
 //   - ownerId: string (optional, immutable on update if present, 1..128 chars)
-//   - name: string (required, 1..140 chars)
+//   - name: string (required, clean commercial text, 1..140 chars)
 //   - city: string (required, in ['CPT', 'JHB'])
-//   - suburb: string (required, 1..100 chars)
-//   - address: string (required, 1..240 chars)
+//   - suburb: string (required, clean text, 1..100 chars)
+//   - address: string (required, clean commercial text, 1..240 chars)
 //   - type: string (required, in ['verified_studio', 'partner_salon'])
 //   - isVerified: bool (required, only settable by techs.approve)
-//   - emptyChairFeeZar: int (required, >= 0)
+//   - emptyChairFeeZar: int (required, 0..50000)
 //
 // Collection: visual_contract_items/{itemId}
 // Fields:
 //   - id: string (required, immutable, matches itemId, 1..128 chars)
 //   - techId: string (required, immutable, 1..128 chars)
-//   - techDisplayName: string (required, 1..120 chars)
+//   - techDisplayName: string (required, clean text, 1..120 chars)
 //   - techTierBadge: string (required, in ['rising', 'verified', 'certified_pro'])
-//   - photoUrl: string (required, 1..500 chars)
-//   - title: string (required, 1..140 chars)
-//   - basePriceZar: int (required, > 0)
-//   - baseDurationMinutes: int (required, > 0)
+//   - photoUrl: string (required, valid HTTPS URL, 10..500 chars)
+//   - title: string (required, clean commercial text, 1..140 chars)
+//   - basePriceZar: int (required, 1..50000)
+//   - baseDurationMinutes: int (required, 1..1440)
 //   - city: string (required, in ['CPT', 'JHB'])
-//   - venueId: string (required, 1..128 chars)
-//   - venueName: string (required, 1..140 chars)
+//   - venueId: string (required, commercial-clean, 1..128 chars)
+//   - venueName: string (required, clean commercial text, 1..140 chars)
 //   - venueType: string (required, in ['verified_studio', 'partner_salon'])
-//   - styleCategory: string (required, 1..80 chars)
-//   - allowedModifiers: list (required, max 15 items)
+//   - styleCategory: string (required, clean text, 1..80 chars)
+//   - allowedModifiers: list of ContractModifier maps (required, max 15 items)
 //
 // Collection: bookings/{bookingId}
 // Fields:
@@ -74,59 +74,168 @@ rules_version = '2';
 //   - clientId: string (required, immutable, 1..128 chars)
 //   - techId: string (required, immutable, 1..128 chars)
 //   - visualContractItemId: string (required, immutable, 1..128 chars)
-//   - venueType: string (required, in ['verified_studio', 'partner_salon'])
+//   - venueType: string (required, in ['verified_studio', 'partner_salon', 'partner_salon_chair'])
 //   - venueId: string (required, 1..128 chars)
 //   - verifiedStudioId: string (optional, 1..128 chars)
-//   - partnerSalonChairSlotId: string (optional, 1..128 chars)
+//   - partnerSalonChairSlotId: string (optional, commercial-clean, 1..128 chars)
 //   - city: string (required, in ['CPT', 'JHB'])
-//   - status: string (required, in ['confirmed', 'in_progress', 'completed', 'cancelled_by_client', 'cancelled_by_tech', 'disputed'])
-//   - totalPriceZar: int (required, > 0)
-//   - totalDurationMinutes: int (required, > 0)
-//   - biometricVerified: bool (optional)
-//   - pinVerified: bool (optional)
-//   - liveCompletionPhotoUrl: string (optional, 1..500 chars)
+//   - status: string (required, in ['pending_payment', 'confirmed', 'in_progress', 'completed', 'cancelled_by_client', 'cancelled_by_tech', 'disputed'])
+//   - totalPriceZar: int (required, 1..100000)
+//   - totalDurationMinutes: int (required, 1..1440)
+//   - biometricVerified: bool (optional, server-authoritative)
+//   - pinVerified: bool (optional, server-authoritative)
+//   - liveCompletionPhotoUrl: string (optional, valid HTTPS URL, 10..500 chars)
 //   - completionPhotoSource: string (optional, must equal 'camera' when completed)
+//   - selectedModifierIds: list of strings (optional, max 15 items, 1..64 chars each)
+//   - scheduledAtIso: string (optional, valid ISO 8601 timestamp, 10..64 chars)
+//   - paymentProvider: string (optional, server-written, immutable, in ['paystack', 'peach_payments', 'payjustnow', 'abe_wallet'])
+//   - paymentReference: string (optional, server-written, immutable, 1..128 chars)
+//   - confirmedAtIso: string (optional, server-written, immutable, valid ISO 8601, 10..64 chars)
+//   - expectedGatewayDueCents: int (optional, server-written, immutable, 0..10000000)
+//   - venueName: string (optional, server-written, immutable, clean commercial text, 1..140 chars)
+//   - venueAddress: string (optional, server-written, immutable, clean commercial text, 1..240 chars)
 //
 // Collection: booking_pins/{bookingId}
+//   - Strictly write-locked from all client SDKs (Cloud Functions / Admin SDK only).
+//   - Strictly readable ONLY by the booking client; never readable by techs or staff.
 // Fields:
 //   - bookingId: string (required, immutable, 1..128 chars)
 //   - clientId: string (required, immutable, 1..128 chars)
+//   - techId: string (required, immutable, 1..128 chars)
 //   - pinCode: string (required, 4 digits)
 //   - failedAttempts: int (required, >= 0)
+//   - lockedUntilIso: string (optional, ISO 8601 UTC timestamp string when locked for 15 minutes)
+//   - supportAlertTriggered: bool (required)
+//   - biometricVerified: bool (required)
+//   - pinVerified: bool (required)
+//   - verifiedAtIso: string (optional, ISO 8601 UTC timestamp string)
+//   - createdAtIso: string (required, immutable, ISO 8601 UTC timestamp string)
 //
-// Collection: wallets/{walletId}, financial_ledger/{entryId}, payouts/{payoutId}
+// Collection: support_security_alerts/{alertId}
+// Fields:
+//   - id: string (required, immutable, matches alertId, 1..128 chars)
+//   - bookingId: string (required, immutable, 1..128 chars)
+//   - clientId: string (required, immutable, 1..128 chars)
+//   - techId: string (required, immutable, 1..128 chars)
+//   - alertType: string (required, immutable, clean text, 1..64 chars, e.g. 'pin_lockout')
+//   - message: string (required, immutable, clean text, 1..400 chars)
+//   - createdAtIso: string (required, immutable, valid ISO 8601, 10..64 chars)
+//   - isResolved: bool (required, updatable only by disputes.resolve staff)
+//
+// Collection: wallets/{walletId} (Client: wallets/{clientId}, Tech: wallets/tech_{techId})
 //   - Strictly write-locked from all client SDKs (Cloud Functions / Admin SDK only).
+//   - Closed-loop invariant: client wallets have no cash withdrawal endpoint or balance write access.
+// Fields (Client Wallet):
+//   - clientId: string (required, immutable, 1..128 chars)
+//   - balanceCents: int (required, >= 0, non-withdrawable closed-loop credit in ZAR cents)
+//   - supportsCashWithdrawal: bool (required, always false)
+//   - updatedAtIso: string (optional, 10..64 chars)
+// Fields (Tech Earnings Account):
+//   - techId: string (required, immutable, 1..128 chars)
+//   - unpaidNetEarningsCents: int (required, >= 0)
+//   - openStoreOrdersCents: int (required, >= 0)
+//   - paidOutTotalCents: int (required, >= 0)
+//   - payoutCadence: string (required, in ['weekly', 'bi_weekly'])
+//
+// Collection: financial_ledger/{entryId}
+//   - Strictly write-locked from all client SDKs (Cloud Functions / Admin SDK only).
+// Fields:
+//   - id: string (required, immutable, matches entryId, 1..128 chars)
+//   - idempotencyKey: string (required, immutable, 1..160 chars, prevents duplicate ledger entries)
+//   - userId: string (required, immutable, 1..128 chars)
+//   - entryType: string (required, immutable, double-entry ledger classification)
+//   - amountZarCents: int (required, immutable, >= 0, stored in ZAR cents to prevent rounding drift)
+//   - amountZar: number (optional, >= 0)
+//   - direction: string (required, immutable, in ['credit', 'debit'])
+//   - description: string (required, immutable, 1..240 chars)
+//   - bookingId: string (optional, immutable, 1..128 chars)
+//   - orderId: string (optional, immutable, 1..128 chars)
+//   - createdAtIso: string (required, immutable, 10..64 chars)
+//
+// Collection: payouts/{payoutId}
+//   - Strictly write-locked from all client SDKs (Cloud Functions / Admin SDK only).
+// Fields:
+//   - id: string (required, immutable, matches payoutId, 1..128 chars)
+//   - idempotencyKey: string (required, immutable, 1..160 chars, prevents duplicate cash-outs)
+//   - techId: string (required, immutable, 1..128 chars)
+//   - amountZarCents: int (required, > 0, payout amount in ZAR cents; see grossRequestedCents / netPayoutCents)
+//   - grossRequestedCents: int (required, > 0)
+//   - convenienceFeeCents: int (required, >= 0)
+//   - netPayoutCents: int (required, > 0)
+//   - isInstantCashOut: bool (required)
+//   - status: string (required)
+//   - createdAtIso: string (required, immutable, 10..64 chars)
 //
 // Collection: vouchers/{voucherId}
+//   - Read restricted to vouchers.manage staff or the specific assignedToUserId owner
+//     to prevent promo-code enumeration from client SDKs.
 // Fields:
-//   - id: string (required, immutable, 1..128 chars)
-//   - code: string (required, 3..32 chars)
-//   - discountAmountZar: int (required, > 0)
-//   - minSpendZar: int (required, >= 0)
-//   - maxUses: int (required, > 0)
-//   - currentUses: int (required, >= 0)
+//   - id: string (required, immutable, matches voucherId, 1..128 chars)
+//   - code: string (required, 3..40 chars, uppercase alphanumeric, underscore, or hyphen)
+//   - discountType: string (required for PromoCouponRecord, in ['fixed_zar', 'percentage'])
+//   - discountValue: int (required for PromoCouponRecord, 1..50000, and <= 100 when percentage)
+//   - discountAmountZar: int (required for legacy VoucherCode, 1..50000)
+//   - minSpendZar: int (required, 0..100000)
+//   - maxRedemptions: int (required for PromoCouponRecord, 1..1000000)
+//   - perUserLimit: int (required for PromoCouponRecord, 1..1000)
+//   - currentRedemptions: int (required for PromoCouponRecord, >= 0 and <= maxRedemptions)
+//   - maxUses: int (required for legacy VoucherCode, 1..1000000)
+//   - currentUses: int (required for legacy VoucherCode, >= 0 and <= maxUses)
 //   - isActive: bool (required)
-//   - issuedForReason: string (required, 1..120 chars)
+//   - expiresAtIso: string (optional, null or valid ISO 8601, 10..64 chars)
+//   - issuedForReason: string (required, clean text, 1..120 chars)
+//   - assignedToUserId: string (optional, null or 1..128 chars, ties apology voucher to specific client)
 //
 // Collection: store_products/{productId}
 // Fields:
 //   - id: string (required, immutable, 1..128 chars)
-//   - sku: string (required, 1..80 chars)
-//   - name: string (required, 1..160 chars)
-//   - category: string (required, 1..80 chars)
-//   - priceZar: int (required, > 0)
-//   - stockQuantity: int (required, >= 0)
+//   - sku: string (required, clean text, 1..80 chars)
+//   - name: string (required, clean text, 1..160 chars)
+//   - category: string (required, clean text, 1..80 chars)
+//   - priceCents: int (required if priceZar omitted, 0..10000000, price in ZAR cents)
+//   - priceZar: int (required if priceCents omitted, 1..100000, price in ZAR)
+//   - stockQty: int (required if stockQuantity omitted, 0..1000000)
+//   - stockQuantity: int (required if stockQty omitted, 0..1000000)
 //   - syncSource: string (required, in ['csv_import', 'admin_manual', 'supplier_api'])
 //   - isAvailable: bool (required)
 //
 // Collection: store_orders/{orderId}
+//   - Created exclusively via backend Cloud Functions / Admin SDK to enforce credit and stock checks.
 // Fields:
 //   - id: string (required, immutable, 1..128 chars)
 //   - techUserId: string (required, immutable, 1..128 chars)
-//   - productIds: list of strings (required, 1..50 items)
-//   - totalAmountZar: int (required, > 0)
-//   - status: string (required, 1..40 chars)
-//   - pargoPickupPointCode: string (required, 1..64 chars)
+//   - productIds: list of strings (required, immutable, 1..50 items)
+//   - totalCents: int (required if totalAmountZar omitted, immutable, 1..100000000)
+//   - totalAmountZar: int (required if totalCents omitted, immutable, 1..1000000)
+//   - idempotencyKey: string (optional, immutable, 1..160 chars)
+//   - status: string (required, in ['pending_fulfilment', 'packed', 'pargo_dispatched_4h', 'collected'])
+//   - pargoPickupPointCode: string (required, immutable, clean text, 1..64 chars)
+//
+// Collection: salon_partners/{salonId}
+// Fields:
+//   - id: string (required, immutable, matches salonId, 1..128 chars)
+//   - ownerId: string (required, immutable, 1..128 chars)
+//   - name: string (required, clean commercial text, 1..140 chars)
+//   - city: string (required, in ['CPT', 'JHB'], immutable once verified)
+//   - suburb: string (required, clean text, 1..100 chars)
+//   - address: string (required, clean commercial text, 1..240 chars)
+//   - venueType: string (required, must equal 'partner_salon')
+//   - isVerified: bool (required, only settable/modifiable by techs.approve)
+//   - defaultChairFeeZar: int (required, 0..50000)
+//
+// Collection: empty_chair_slots/{slotId}
+// Fields:
+//   - slotId: string (required, immutable, matches slotId, 1..128 chars)
+//   - ownerId: string (optional, immutable if present, 1..128 chars)
+//   - venueId: string (required, immutable, 1..128 chars, verified commercial partner salon)
+//   - venueName: string (required, clean commercial text, 1..140 chars)
+//   - city: string (required, in ['CPT', 'JHB'])
+//   - suburb: string (required, clean text, 1..100 chars)
+//   - address: string (required, clean commercial text, 1..240 chars)
+//   - chairFeeZar: int (required, 0..50000)
+//   - chairFeeCents: int (optional, 0..5000000)
+//   - windowLabel: string (required, clean text, 1..100 chars, off-peak availability window)
+//   - isAvailable: bool (required)
 //
 // Collection: dispute_tickets/{ticketId}
 // Fields:
@@ -134,22 +243,124 @@ rules_version = '2';
 //   - bookingId: string (required, immutable, 1..128 chars)
 //   - clientId: string (required, immutable, 1..128 chars)
 //   - techId: string (required, immutable, 1..128 chars)
-//   - portfolioPhotoUrl: string (required, 1..500 chars)
-//   - techLiveCompletionPhotoUrl: string (required, 1..500 chars)
-//   - clientComplaintPhotoUrl: string (required, 1..500 chars)
-//   - clientReason: string (required, 1..800 chars)
+//   - portfolioPhotoUrl: string (required, valid HTTPS URL, 10..500 chars)
+//   - techLiveCompletionPhotoUrl: string (required, valid HTTPS URL, 10..500 chars)
+//   - clientComplaintPhotoUrl: string (required, valid HTTPS URL, 10..500 chars)
+//   - clientReason: string (required, clean text, 1..800 chars)
 //   - status: string (required, in ['open', 'under_review', 'resolved_refund_client', 'resolved_payout_tech', 'resolved_split'])
-//   - resolutionNotes: string (optional, 0..800 chars)
+//   - resolutionNotes: string (optional, clean text, 0..800 chars)
 //
 // Collection: staff_audit_logs/{logId}
 // Fields:
 //   - id: string (required, immutable, 1..128 chars)
 //   - actorId: string (required, immutable, matches request.auth.uid, 1..128 chars)
 //   - actorUacGroup: string (required, immutable, 1..64 chars)
-//   - action: string (required, immutable, 1..120 chars)
+//   - action: string (required, immutable, clean text, 1..120 chars)
 //   - targetId: string (required, immutable, 1..128 chars)
-//   - timestampIso: string (required, immutable, 1..64 chars)
-//   - notes: string (required, immutable, 0..500 chars)
+//   - timestampIso: string (required, immutable, valid ISO 8601, 10..64 chars)
+//   - notes: string (required, immutable, clean text, 0..500 chars)
+//
+// ===============================================================
+// Stage 5 Collections (Webhooks, Reminders, Onboarding & Tokenised Cards)
+// ===============================================================
+//
+// Collection: processed_webhooks/{dedupeKey}
+//   - Strictly server-only (Admin SDK / Cloud Functions). No client reads or writes.
+// Fields:
+//   - dedupeKey: string (required, immutable, matches dedupeKey, 1..192 chars)
+//   - bookingId: string (required, immutable, 1..128 chars)
+//   - reference: string (required, immutable, 1..128 chars)
+//   - provider: string (required, immutable, in ['paystack', 'peach_payments', 'payjustnow'])
+//   - amountPaidCents: int (required, immutable, > 0)
+//   - processedAtIso: string (required, immutable, valid ISO 8601, 10..64 chars)
+//
+// Collection: notification_outbox/{notificationId}
+//   - Strictly server-only (Admin SDK / Cloud Functions).
+//   - Contains client-only 4-digit booking PINs in message bodies and phone/email
+//     recipient identifiers; zero client/tech/staff reads or writes permitted.
+// Fields:
+//   - id: string (required, immutable, 1..128 chars)
+//   - channel: string (required, in ['push', 'whatsapp', 'email'])
+//   - recipientId: string (required, 1..160 chars)
+//   - bookingId: string (required, 1..128 chars)
+//   - body: string (required, 1..2000 chars)
+//   - metadata: map (required)
+//   - sentAtIso: string (required, valid ISO 8601, 10..64 chars)
+//
+// Collection: scheduled_reminders/{reminderId}
+//   - Strictly server-only (Admin SDK / Cloud Scheduler). Contains recipientPhone PII.
+// Fields:
+//   - id: string (required, immutable, 1..128 chars)
+//   - bookingId: string (required, immutable, 1..128 chars)
+//   - clientId: string (required, immutable, 1..128 chars)
+//   - channels: list of strings (required, max 5 items)
+//   - recipientPhone: string (optional, null or 1..32 chars)
+//   - sendAtIso: string (required, valid ISO 8601, 10..64 chars)
+//   - message: string (required, 1..1000 chars)
+//   - status: string (required, in ['scheduled', 'sent', 'cancelled', 'failed'])
+//
+// Collection: tech_onboarding_applications/{applicationId}
+//   - Created exclusively via rate-limited, POPIA-checked, sanitised Cloud Function.
+//   - Readable and reviewable ONLY by active staff with techs.approve (PII protection).
+// Fields:
+//   - id: string (required, immutable, matches applicationId, 1..128 chars)
+//   - fullName: string (required, immutable, clean text, 2..120 chars)
+//   - instagramHandle: string (required, immutable, clean text, 1..80 chars)
+//   - email: string (required, immutable, valid email, 3..160 chars)
+//   - phone: string (required, immutable, clean text, 8..32 chars)
+//   - city: string (required, immutable, in ['CPT', 'JHB'])
+//   - venueType: string (required, immutable, in ['verified_studio', 'partner_salon_chair'])
+//   - venueName: string (required, immutable, clean commercial text, 1..140 chars)
+//   - venueAddress: string (required, immutable, clean commercial text, 1..240 chars)
+//   - specialty: string (required, immutable, clean text, 1..140 chars)
+//   - basePriceRangeZar: string (required, immutable, clean text, 1..40 chars)
+//   - status: string (required, in ['pending_aqeelah_review', 'approved', 'rejected'])
+//   - createdAtIso: string (required, immutable, valid ISO 8601, 10..64 chars)
+//
+// Collection: salon_partner_applications/{applicationId}
+//   - Created exclusively via rate-limited, POPIA-checked, sanitised Cloud Function.
+//   - Readable and reviewable ONLY by active staff with techs.approve (PII protection).
+// Fields:
+//   - id: string (required, immutable, matches applicationId, 1..128 chars)
+//   - salonName: string (required, immutable, clean commercial text, 1..140 chars)
+//   - ownerName: string (required, immutable, clean text, 2..120 chars)
+//   - email: string (required, immutable, valid email, 3..160 chars)
+//   - phone: string (required, immutable, clean text, 8..32 chars)
+//   - city: string (required, immutable, in ['CPT', 'JHB'])
+//   - suburb: string (required, immutable, clean text, 1..100 chars)
+//   - streetAddress: string (required, immutable, clean commercial text, 1..240 chars)
+//   - availableChairs: int (required, immutable, 1..50)
+//   - quietDaysWindow: string (required, immutable, clean text, 1..120 chars)
+//   - suggestedChairFeeZar: int (required, immutable, 0..50000)
+//   - status: string (required, in ['pending_verification', 'approved', 'rejected'])
+//   - createdAtIso: string (required, immutable, valid ISO 8601, 10..64 chars)
+//
+// Collection: client_waitlist/{entryId}
+//   - Created exclusively via rate-limited, POPIA-checked, sanitised Cloud Function.
+//   - Readable ONLY by active staff with vouchers.manage or uac.manage_roles (PII protection).
+// Fields:
+//   - id: string (required, immutable, matches entryId, 1..128 chars)
+//   - firstName: string (required, immutable, clean text, 2..80 chars)
+//   - email: string (required, immutable, valid email, 3..160 chars)
+//   - city: string (required, immutable, in ['CPT', 'JHB'])
+//   - preferredLook: string (required, immutable, clean text, 1..120 chars)
+//   - voucherCodeIssued: string (required, immutable, 3..40 chars)
+//   - createdAtIso: string (required, immutable, valid ISO 8601, 10..64 chars)
+//
+// Collection: saved_card_tokens/{tokenId}
+//   - Created/updated exclusively via backend Cloud Functions after gateway verification.
+//   - Readable and deletable ONLY by the active owning client (never techs, other clients, or staff).
+// Fields:
+//   - id: string (required, immutable, matches tokenId, 1..128 chars)
+//   - clientId: string (required, immutable, 1..128 chars)
+//   - provider: string (required, immutable, in ['paystack', 'peach_payments'])
+//   - authorizationCode: string (required, immutable, 1..160 chars, tokenised reference only)
+//   - last4: string (required, immutable, exactly 4 digits)
+//   - cardBrand: string (required, immutable, clean text, 1..40 chars)
+//   - expiryMonth: string (required, immutable, 2 digits)
+//   - expiryYear: string (required, immutable, 2 or 4 digits)
+//   - bankName: string (optional, immutable, clean text, 0..80 chars)
+//   - createdAtIso: string (optional, immutable, valid ISO 8601, 10..64 chars)
 // ===============================================================
 
 service cloud.firestore {
@@ -232,6 +443,29 @@ service cloud.firestore {
       return val is string && val.size() >= minLen && val.size() <= maxLen;
     }
 
+    function isCleanText(text) {
+      return text is string &&
+        !text.lower().matches(".*(<[a-z!/][^>]*>|javascript\\s*:|vbscript\\s*:|data\\s*:\\s*text/html|\\bon(error|load|click|mouseover|focus|blur|submit)\\s*=).*");
+    }
+
+    function validCleanString(val, minLen, maxLen) {
+      return validString(val, minLen, maxLen) && isCleanText(val);
+    }
+
+    function isValidHttpsUrl(url) {
+      return url is string &&
+        url.size() >= 10 &&
+        url.size() <= 500 &&
+        url.matches("^https://[^\\s<>\"']+$");
+    }
+
+    function isValidIsoString(dateStr) {
+      return dateStr is string &&
+        dateStr.size() >= 10 &&
+        dateStr.size() <= 64 &&
+        dateStr.matches("^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d+)?(Z|[+-]\\d{2}:\\d{2})?$");
+    }
+
     function isValidEmail(email) {
       return email is string &&
         email.size() >= 3 &&
@@ -247,8 +481,81 @@ service cloud.firestore {
       return venueType is string && venueType in ['verified_studio', 'partner_salon'];
     }
 
+    function isValidBookingVenueType(venueType) {
+      return venueType is string && venueType in ['verified_studio', 'partner_salon', 'partner_salon_chair'];
+    }
+
     function isValidTechTier(badge) {
       return badge is string && badge in ['rising', 'verified', 'certified_pro'];
+    }
+
+    function isCommercialAddressClean(text) {
+      return text is string &&
+        !text.lower().matches(".*(house call|house_call|housecall|home visit|home_visit|residential|private home|client address|mobile tech).*");
+    }
+
+    function hasOnlyValidUacPermissions(perms) {
+      return perms is list &&
+        perms.hasOnly([
+          'disputes.view', 'disputes.resolve', 'wallet.credit_client',
+          'techs.approve', 'techs.award_pro', 'vouchers.manage',
+          'store.manage_inventory', 'store.fulfil_orders',
+          'uac.manage_roles', 'ledger.export'
+        ]);
+    }
+
+    function isValidContractModifier(mod) {
+      return mod is map &&
+        mod.keys().hasAll(['id', 'name', 'additionalPriceZar', 'additionalDurationMinutes']) &&
+        mod.keys().hasOnly(['id', 'name', 'additionalPriceZar', 'additionalDurationMinutes']) &&
+        validCleanString(mod.id, 1, 64) &&
+        validCleanString(mod.name, 1, 100) &&
+        mod.additionalPriceZar is int &&
+        mod.additionalPriceZar >= 0 &&
+        mod.additionalPriceZar <= 10000 &&
+        mod.additionalDurationMinutes is int &&
+        mod.additionalDurationMinutes >= 0 &&
+        mod.additionalDurationMinutes <= 480;
+    }
+
+    function isValidAllowedModifiersList(mods) {
+      return mods is list &&
+        mods.size() <= 15 &&
+        (mods.size() < 1 || isValidContractModifier(mods[0])) &&
+        (mods.size() < 2 || isValidContractModifier(mods[1])) &&
+        (mods.size() < 3 || isValidContractModifier(mods[2])) &&
+        (mods.size() < 4 || isValidContractModifier(mods[3])) &&
+        (mods.size() < 5 || isValidContractModifier(mods[4])) &&
+        (mods.size() < 6 || isValidContractModifier(mods[5])) &&
+        (mods.size() < 7 || isValidContractModifier(mods[6])) &&
+        (mods.size() < 8 || isValidContractModifier(mods[7])) &&
+        (mods.size() < 9 || isValidContractModifier(mods[8])) &&
+        (mods.size() < 10 || isValidContractModifier(mods[9])) &&
+        (mods.size() < 11 || isValidContractModifier(mods[10])) &&
+        (mods.size() < 12 || isValidContractModifier(mods[11])) &&
+        (mods.size() < 13 || isValidContractModifier(mods[12])) &&
+        (mods.size() < 14 || isValidContractModifier(mods[13])) &&
+        (mods.size() < 15 || isValidContractModifier(mods[14]));
+    }
+
+    function isValidShortIdList(items, maxItems, maxItemLen) {
+      return items is list &&
+        items.size() <= maxItems &&
+        (items.size() < 1 || validCleanString(items[0], 1, maxItemLen)) &&
+        (items.size() < 2 || validCleanString(items[1], 1, maxItemLen)) &&
+        (items.size() < 3 || validCleanString(items[2], 1, maxItemLen)) &&
+        (items.size() < 4 || validCleanString(items[3], 1, maxItemLen)) &&
+        (items.size() < 5 || validCleanString(items[4], 1, maxItemLen)) &&
+        (items.size() < 6 || validCleanString(items[5], 1, maxItemLen)) &&
+        (items.size() < 7 || validCleanString(items[6], 1, maxItemLen)) &&
+        (items.size() < 8 || validCleanString(items[7], 1, maxItemLen)) &&
+        (items.size() < 9 || validCleanString(items[8], 1, maxItemLen)) &&
+        (items.size() < 10 || validCleanString(items[9], 1, maxItemLen)) &&
+        (items.size() < 11 || validCleanString(items[10], 1, maxItemLen)) &&
+        (items.size() < 12 || validCleanString(items[11], 1, maxItemLen)) &&
+        (items.size() < 13 || validCleanString(items[12], 1, maxItemLen)) &&
+        (items.size() < 14 || validCleanString(items[13], 1, maxItemLen)) &&
+        (items.size() < 15 || validCleanString(items[14], 1, maxItemLen));
     }
 
     // ===============================================================
@@ -260,15 +567,17 @@ service cloud.firestore {
         hasOnlyAllowedFields(['id', 'name', 'email', 'uacGroupId', 'city', 'permissions', 'isActive', 'walletBalanceZar']) &&
         data.id == userId &&
         validString(data.id, 1, 128) &&
-        validString(data.name, 1, 120) &&
+        validCleanString(data.name, 1, 120) &&
         isValidEmail(data.email) &&
         data.uacGroupId in ['super_admin', 'ops_admin', 'support_agent', 'supplier_partner', 'salon_partner', 'tech', 'client'] &&
         isValidCity(data.city) &&
         data.permissions is list &&
         data.permissions.size() <= 20 &&
+        hasOnlyValidUacPermissions(data.permissions) &&
         data.isActive is bool &&
         data.walletBalanceZar is number &&
-        data.walletBalanceZar >= 0;
+        data.walletBalanceZar >= 0 &&
+        data.walletBalanceZar <= 1000000;
     }
 
     function isValidUacGroup(data, groupId) {
@@ -276,9 +585,10 @@ service cloud.firestore {
         hasOnlyAllowedFields(['id', 'name', 'permissions', 'isActive']) &&
         data.id == groupId &&
         validString(data.id, 1, 64) &&
-        validString(data.name, 1, 120) &&
+        validCleanString(data.name, 1, 120) &&
         data.permissions is list &&
         data.permissions.size() <= 30 &&
+        hasOnlyValidUacPermissions(data.permissions) &&
         data.isActive is bool;
     }
 
@@ -295,18 +605,21 @@ service cloud.firestore {
         ]) &&
         data.userId == userId &&
         validString(data.userId, 1, 128) &&
-        validString(data.displayName, 1, 120) &&
+        validCleanString(data.displayName, 1, 120) &&
         isValidTechTier(data.tierBadge) &&
-        validString(data.verifiedStudioId, 1, 128) &&
+        validCleanString(data.verifiedStudioId, 1, 128) &&
+        isCommercialAddressClean(data.verifiedStudioId) &&
         isValidCity(data.city) &&
-        validString(data.bio, 0, 500) &&
+        validCleanString(data.bio, 0, 500) &&
         data.pendingStoreCreditZar is number &&
         data.pendingStoreCreditZar >= 0 &&
+        data.pendingStoreCreditZar <= 1000000 &&
         data.rating is number &&
         data.rating >= 0 &&
         data.rating <= 5 &&
         data.completedBookingsCount is int &&
         data.completedBookingsCount >= 0 &&
+        data.completedBookingsCount <= 1000000 &&
         data.isApproved is bool;
     }
 
@@ -316,14 +629,84 @@ service cloud.firestore {
         data.id == venueId &&
         validString(data.id, 1, 128) &&
         (!('ownerId' in data) || validString(data.ownerId, 1, 128)) &&
-        validString(data.name, 1, 140) &&
+        validCleanString(data.name, 1, 140) &&
+        isCommercialAddressClean(data.name) &&
         isValidCity(data.city) &&
-        validString(data.suburb, 1, 100) &&
-        validString(data.address, 1, 240) &&
+        validCleanString(data.suburb, 1, 100) &&
+        validCleanString(data.address, 1, 240) &&
+        isCommercialAddressClean(data.address) &&
         isValidVenueType(data.type) &&
         data.isVerified is bool &&
         data.emptyChairFeeZar is int &&
-        data.emptyChairFeeZar >= 0;
+        data.emptyChairFeeZar >= 0 &&
+        data.emptyChairFeeZar <= 50000;
+    }
+
+    function isValidSalonPartner(data, salonId) {
+      return hasRequiredFields([
+          'id', 'ownerId', 'name', 'city', 'suburb',
+          'address', 'venueType', 'isVerified', 'defaultChairFeeZar'
+        ]) &&
+        hasOnlyAllowedFields([
+          'id', 'ownerId', 'name', 'city', 'suburb',
+          'address', 'venueType', 'isVerified', 'defaultChairFeeZar'
+        ]) &&
+        data.id == salonId &&
+        validString(data.id, 1, 128) &&
+        validString(data.ownerId, 1, 128) &&
+        validCleanString(data.name, 1, 140) &&
+        isCommercialAddressClean(data.name) &&
+        isValidCity(data.city) &&
+        validCleanString(data.suburb, 1, 100) &&
+        validCleanString(data.address, 1, 240) &&
+        isCommercialAddressClean(data.address) &&
+        data.venueType == 'partner_salon' &&
+        data.isVerified is bool &&
+        data.defaultChairFeeZar is int &&
+        data.defaultChairFeeZar >= 0 &&
+        data.defaultChairFeeZar <= 50000;
+    }
+
+    function isValidEmptyChairSlot(data, slotId) {
+      return hasRequiredFields([
+          'slotId', 'venueId', 'venueName', 'city', 'suburb',
+          'address', 'chairFeeZar', 'windowLabel', 'isAvailable'
+        ]) &&
+        hasOnlyAllowedFields([
+          'slotId', 'ownerId', 'venueId', 'venueName', 'city', 'suburb',
+          'address', 'chairFeeZar', 'chairFeeCents', 'windowLabel', 'isAvailable'
+        ]) &&
+        data.slotId == slotId &&
+        validString(data.slotId, 1, 128) &&
+        (!('ownerId' in data) || validString(data.ownerId, 1, 128)) &&
+        validString(data.venueId, 1, 128) &&
+        validCleanString(data.venueName, 1, 140) &&
+        isCommercialAddressClean(data.venueName) &&
+        isValidCity(data.city) &&
+        validCleanString(data.suburb, 1, 100) &&
+        validCleanString(data.address, 1, 240) &&
+        isCommercialAddressClean(data.address) &&
+        data.chairFeeZar is int &&
+        data.chairFeeZar >= 0 &&
+        data.chairFeeZar <= 50000 &&
+        (!('chairFeeCents' in data) || (data.chairFeeCents is int && data.chairFeeCents >= 0 && data.chairFeeCents <= 5000000)) &&
+        validCleanString(data.windowLabel, 1, 100) &&
+        data.isAvailable is bool &&
+        // Strict Commercial Venue Policy: slot must reference a verified partner salon in the same city
+        (
+          (
+            exists(/databases/$(database)/documents/commercial_venues/$(data.venueId)) &&
+            get(/databases/$(database)/documents/commercial_venues/$(data.venueId)).data.isVerified == true &&
+            get(/databases/$(database)/documents/commercial_venues/$(data.venueId)).data.type == 'partner_salon' &&
+            get(/databases/$(database)/documents/commercial_venues/$(data.venueId)).data.city == data.city
+          ) ||
+          (
+            exists(/databases/$(database)/documents/salon_partners/$(data.venueId)) &&
+            get(/databases/$(database)/documents/salon_partners/$(data.venueId)).data.isVerified == true &&
+            get(/databases/$(database)/documents/salon_partners/$(data.venueId)).data.venueType == 'partner_salon' &&
+            get(/databases/$(database)/documents/salon_partners/$(data.venueId)).data.city == data.city
+          )
+        );
     }
 
     function isValidVisualContractItem(data, itemId) {
@@ -342,21 +725,25 @@ service cloud.firestore {
         data.id == itemId &&
         validString(data.id, 1, 128) &&
         validString(data.techId, 1, 128) &&
-        validString(data.techDisplayName, 1, 120) &&
+        validCleanString(data.techDisplayName, 1, 120) &&
         isValidTechTier(data.techTierBadge) &&
-        validString(data.photoUrl, 1, 500) &&
-        validString(data.title, 1, 140) &&
+        isValidHttpsUrl(data.photoUrl) &&
+        validCleanString(data.title, 1, 140) &&
+        isCommercialAddressClean(data.title) &&
         data.basePriceZar is int &&
         data.basePriceZar > 0 &&
+        data.basePriceZar <= 50000 &&
         data.baseDurationMinutes is int &&
         data.baseDurationMinutes > 0 &&
+        data.baseDurationMinutes <= 1440 &&
         isValidCity(data.city) &&
-        validString(data.venueId, 1, 128) &&
-        validString(data.venueName, 1, 140) &&
+        validCleanString(data.venueId, 1, 128) &&
+        isCommercialAddressClean(data.venueId) &&
+        validCleanString(data.venueName, 1, 140) &&
+        isCommercialAddressClean(data.venueName) &&
         isValidVenueType(data.venueType) &&
-        validString(data.styleCategory, 1, 80) &&
-        data.allowedModifiers is list &&
-        data.allowedModifiers.size() <= 15;
+        validCleanString(data.styleCategory, 1, 80) &&
+        isValidAllowedModifiersList(data.allowedModifiers);
     }
 
     function isValidBooking(data, bookingId) {
@@ -370,32 +757,80 @@ service cloud.firestore {
           'venueType', 'venueId', 'verifiedStudioId', 'partnerSalonChairSlotId',
           'city', 'status', 'totalPriceZar', 'totalDurationMinutes',
           'biometricVerified', 'pinVerified', 'liveCompletionPhotoUrl',
-          'completionPhotoSource', 'selectedModifierIds', 'scheduledAtIso'
+          'completionPhotoSource', 'selectedModifierIds', 'scheduledAtIso',
+          'paymentProvider', 'paymentReference', 'confirmedAtIso',
+          'expectedGatewayDueCents', 'venueName', 'venueAddress'
         ]) &&
         data.id == bookingId &&
         validString(data.id, 1, 128) &&
         validString(data.clientId, 1, 128) &&
         validString(data.techId, 1, 128) &&
         validString(data.visualContractItemId, 1, 128) &&
-        isValidVenueType(data.venueType) &&
-        validString(data.venueId, 1, 128) &&
+        isValidBookingVenueType(data.venueType) &&
+        validCleanString(data.venueId, 1, 128) &&
+        isCommercialAddressClean(data.venueId) &&
+        // Strict Venue-Only Policy (Zero House Calls): venue must exist, be verified, and match booking city
+        (
+          (
+            exists(/databases/$(database)/documents/commercial_venues/$(data.venueId)) &&
+            get(/databases/$(database)/documents/commercial_venues/$(data.venueId)).data.isVerified == true &&
+            get(/databases/$(database)/documents/commercial_venues/$(data.venueId)).data.city == data.city
+          ) ||
+          (
+            data.venueType in ['partner_salon', 'partner_salon_chair'] &&
+            exists(/databases/$(database)/documents/salon_partners/$(data.venueId)) &&
+            get(/databases/$(database)/documents/salon_partners/$(data.venueId)).data.isVerified == true &&
+            get(/databases/$(database)/documents/salon_partners/$(data.venueId)).data.city == data.city
+          )
+        ) &&
+        (
+          data.venueType != 'verified_studio' ||
+          (
+            'verifiedStudioId' in data &&
+            validCleanString(data.verifiedStudioId, 1, 128) &&
+            isCommercialAddressClean(data.verifiedStudioId) &&
+            data.verifiedStudioId == data.venueId
+          )
+        ) &&
+        (
+          !(data.venueType in ['partner_salon', 'partner_salon_chair']) ||
+          (
+            'partnerSalonChairSlotId' in data &&
+            validCleanString(data.partnerSalonChairSlotId, 1, 128) &&
+            isCommercialAddressClean(data.partnerSalonChairSlotId)
+          )
+        ) &&
         (
           !('verifiedStudioId' in data) ||
-          validString(data.verifiedStudioId, 1, 128)
+          (validCleanString(data.verifiedStudioId, 1, 128) && isCommercialAddressClean(data.verifiedStudioId))
         ) &&
         (
           !('partnerSalonChairSlotId' in data) ||
-          validString(data.partnerSalonChairSlotId, 1, 128)
+          (validCleanString(data.partnerSalonChairSlotId, 1, 128) && isCommercialAddressClean(data.partnerSalonChairSlotId))
         ) &&
         isValidCity(data.city) &&
         data.status in [
-          'confirmed', 'in_progress', 'completed',
+          'pending_payment', 'confirmed', 'in_progress', 'completed',
           'cancelled_by_client', 'cancelled_by_tech', 'disputed'
         ] &&
         data.totalPriceZar is int &&
         data.totalPriceZar > 0 &&
+        data.totalPriceZar <= 100000 &&
         data.totalDurationMinutes is int &&
         data.totalDurationMinutes > 0 &&
+        data.totalDurationMinutes <= 1440 &&
+        (!('biometricVerified' in data) || data.biometricVerified is bool) &&
+        (!('pinVerified' in data) || data.pinVerified is bool) &&
+        (!('liveCompletionPhotoUrl' in data) || isValidHttpsUrl(data.liveCompletionPhotoUrl)) &&
+        (!('completionPhotoSource' in data) || (data.completionPhotoSource is string && data.completionPhotoSource == 'camera')) &&
+        (!('selectedModifierIds' in data) || isValidShortIdList(data.selectedModifierIds, 15, 64)) &&
+        (!('scheduledAtIso' in data) || isValidIsoString(data.scheduledAtIso)) &&
+        (!('paymentProvider' in data) || (data.paymentProvider is string && data.paymentProvider in ['paystack', 'peach_payments', 'payjustnow', 'abe_wallet'])) &&
+        (!('paymentReference' in data) || validCleanString(data.paymentReference, 1, 128)) &&
+        (!('confirmedAtIso' in data) || isValidIsoString(data.confirmedAtIso)) &&
+        (!('expectedGatewayDueCents' in data) || (data.expectedGatewayDueCents is int && data.expectedGatewayDueCents >= 0 && data.expectedGatewayDueCents <= 10000000)) &&
+        (!('venueName' in data) || (validCleanString(data.venueName, 1, 140) && isCommercialAddressClean(data.venueName))) &&
+        (!('venueAddress' in data) || (validCleanString(data.venueAddress, 1, 240) && isCommercialAddressClean(data.venueAddress))) &&
         // Appointment Start Lock invariant: cannot be in_progress unless biometric + PIN verified
         (
           data.status != 'in_progress' ||
@@ -405,66 +840,146 @@ service cloud.firestore {
         (
           data.status != 'completed' ||
           (
-            validString(data.liveCompletionPhotoUrl, 1, 500) &&
+            'liveCompletionPhotoUrl' in data &&
+            isValidHttpsUrl(data.liveCompletionPhotoUrl) &&
             data.completionPhotoSource == 'camera'
           )
         );
     }
 
-    function isValidVoucher(data, voucherId) {
+    function isValidSupportSecurityAlert(data, alertId) {
       return hasRequiredFields([
-          'id', 'code', 'discountAmountZar', 'minSpendZar',
-          'maxUses', 'currentUses', 'isActive', 'issuedForReason'
+          'id', 'bookingId', 'clientId', 'techId',
+          'alertType', 'message', 'createdAtIso', 'isResolved'
         ]) &&
         hasOnlyAllowedFields([
-          'id', 'code', 'discountAmountZar', 'minSpendZar',
-          'maxUses', 'currentUses', 'isActive', 'issuedForReason'
+          'id', 'bookingId', 'clientId', 'techId',
+          'alertType', 'message', 'createdAtIso', 'isResolved'
+        ]) &&
+        data.id == alertId &&
+        validString(data.id, 1, 128) &&
+        validString(data.bookingId, 1, 128) &&
+        validString(data.clientId, 1, 128) &&
+        validString(data.techId, 1, 128) &&
+        validCleanString(data.alertType, 1, 64) &&
+        validCleanString(data.message, 1, 400) &&
+        isValidIsoString(data.createdAtIso) &&
+        data.isResolved is bool;
+    }
+
+    function isValidVoucher(data, voucherId) {
+      return hasRequiredFields([
+          'id', 'code', 'minSpendZar', 'isActive', 'issuedForReason'
+        ]) &&
+        hasOnlyAllowedFields([
+          'id', 'code', 'discountType', 'discountValue', 'discountAmountZar',
+          'minSpendZar', 'maxRedemptions', 'maxUses', 'perUserLimit',
+          'currentRedemptions', 'currentUses', 'isActive', 'expiresAtIso',
+          'issuedForReason', 'assignedToUserId'
         ]) &&
         data.id == voucherId &&
         validString(data.id, 1, 128) &&
-        validString(data.code, 3, 32) &&
-        data.discountAmountZar is int &&
-        data.discountAmountZar > 0 &&
+        validString(data.code, 3, 40) &&
+        data.code.matches("^[A-Z0-9_-]{3,40}$") &&
         data.minSpendZar is int &&
         data.minSpendZar >= 0 &&
-        data.maxUses is int &&
-        data.maxUses > 0 &&
-        data.currentUses is int &&
-        data.currentUses >= 0 &&
+        data.minSpendZar <= 100000 &&
         data.isActive is bool &&
-        validString(data.issuedForReason, 1, 120);
+        validCleanString(data.issuedForReason, 1, 120) &&
+        (!('expiresAtIso' in data) || data.expiresAtIso == null || isValidIsoString(data.expiresAtIso)) &&
+        (!('assignedToUserId' in data) || data.assignedToUserId == null || validString(data.assignedToUserId, 1, 128)) &&
+        // Discount validation: supports modern fixed_zar / percentage coupons and legacy discountAmountZar
+        (
+          (
+            'discountType' in data &&
+            'discountValue' in data &&
+            data.discountType is string &&
+            data.discountType in ['fixed_zar', 'percentage'] &&
+            data.discountValue is int &&
+            data.discountValue > 0 &&
+            data.discountValue <= 50000 &&
+            (data.discountType != 'percentage' || data.discountValue <= 100) &&
+            (!('discountAmountZar' in data) || (data.discountAmountZar is int && data.discountAmountZar > 0 && data.discountAmountZar <= 50000))
+          ) ||
+          (
+            !('discountType' in data) &&
+            !('discountValue' in data) &&
+            'discountAmountZar' in data &&
+            data.discountAmountZar is int &&
+            data.discountAmountZar > 0 &&
+            data.discountAmountZar <= 50000
+          )
+        ) &&
+        // Redemption cap validation: supports modern perUserLimit/maxRedemptions and legacy maxUses/currentUses
+        (
+          (
+            'maxRedemptions' in data &&
+            'currentRedemptions' in data &&
+            'perUserLimit' in data &&
+            data.maxRedemptions is int &&
+            data.maxRedemptions > 0 &&
+            data.maxRedemptions <= 1000000 &&
+            data.currentRedemptions is int &&
+            data.currentRedemptions >= 0 &&
+            data.currentRedemptions <= data.maxRedemptions &&
+            data.perUserLimit is int &&
+            data.perUserLimit > 0 &&
+            data.perUserLimit <= 1000 &&
+            (!('maxUses' in data) || (data.maxUses is int && data.maxUses > 0 && data.maxUses <= 1000000)) &&
+            (!('currentUses' in data) || (data.currentUses is int && data.currentUses >= 0 && data.currentUses <= data.maxUses))
+          ) ||
+          (
+            !('maxRedemptions' in data) &&
+            !('currentRedemptions' in data) &&
+            !('perUserLimit' in data) &&
+            'maxUses' in data &&
+            'currentUses' in data &&
+            data.maxUses is int &&
+            data.maxUses > 0 &&
+            data.maxUses <= 1000000 &&
+            data.currentUses is int &&
+            data.currentUses >= 0 &&
+            data.currentUses <= data.maxUses
+          )
+        );
     }
 
     function isValidStoreProduct(data, productId) {
       return hasRequiredFields([
-          'id', 'sku', 'name', 'category',
-          'priceZar', 'stockQuantity', 'syncSource', 'isAvailable'
+          'id', 'sku', 'name', 'category', 'syncSource', 'isAvailable'
         ]) &&
         hasOnlyAllowedFields([
-          'id', 'sku', 'name', 'category',
-          'priceZar', 'stockQuantity', 'syncSource', 'isAvailable'
+          'id', 'sku', 'name', 'category', 'priceZar', 'priceCents',
+          'stockQuantity', 'stockQty', 'syncSource', 'isAvailable'
         ]) &&
         data.id == productId &&
         validString(data.id, 1, 128) &&
-        validString(data.sku, 1, 80) &&
-        validString(data.name, 1, 160) &&
-        validString(data.category, 1, 80) &&
-        data.priceZar is int &&
-        data.priceZar > 0 &&
-        data.stockQuantity is int &&
-        data.stockQuantity >= 0 &&
+        validCleanString(data.sku, 1, 80) &&
+        validCleanString(data.name, 1, 160) &&
+        validCleanString(data.category, 1, 80) &&
+        (
+          ('priceCents' in data && data.priceCents is int && data.priceCents >= 0 && data.priceCents <= 10000000) ||
+          ('priceZar' in data && data.priceZar is int && data.priceZar > 0 && data.priceZar <= 100000)
+        ) &&
+        (!('priceCents' in data) || (data.priceCents is int && data.priceCents >= 0 && data.priceCents <= 10000000)) &&
+        (!('priceZar' in data) || (data.priceZar is int && data.priceZar > 0 && data.priceZar <= 100000)) &&
+        (
+          ('stockQty' in data && data.stockQty is int && data.stockQty >= 0 && data.stockQty <= 1000000) ||
+          ('stockQuantity' in data && data.stockQuantity is int && data.stockQuantity >= 0 && data.stockQuantity <= 1000000)
+        ) &&
+        (!('stockQty' in data) || (data.stockQty is int && data.stockQty >= 0 && data.stockQty <= 1000000)) &&
+        (!('stockQuantity' in data) || (data.stockQuantity is int && data.stockQuantity >= 0 && data.stockQuantity <= 1000000)) &&
         data.syncSource in ['csv_import', 'admin_manual', 'supplier_api'] &&
         data.isAvailable is bool;
     }
 
     function isValidStoreOrder(data, orderId) {
       return hasRequiredFields([
-          'id', 'techUserId', 'productIds',
-          'totalAmountZar', 'status', 'pargoPickupPointCode'
+          'id', 'techUserId', 'productIds', 'status', 'pargoPickupPointCode'
         ]) &&
         hasOnlyAllowedFields([
-          'id', 'techUserId', 'productIds',
-          'totalAmountZar', 'status', 'pargoPickupPointCode'
+          'id', 'techUserId', 'productIds', 'totalAmountZar', 'totalCents',
+          'idempotencyKey', 'status', 'pargoPickupPointCode'
         ]) &&
         data.id == orderId &&
         validString(data.id, 1, 128) &&
@@ -472,10 +987,17 @@ service cloud.firestore {
         data.productIds is list &&
         data.productIds.size() >= 1 &&
         data.productIds.size() <= 50 &&
-        data.totalAmountZar is int &&
-        data.totalAmountZar > 0 &&
-        validString(data.status, 1, 40) &&
-        validString(data.pargoPickupPointCode, 1, 64);
+        (
+          ('totalCents' in data && data.totalCents is int && data.totalCents > 0 && data.totalCents <= 100000000) ||
+          ('totalAmountZar' in data && data.totalAmountZar is int && data.totalAmountZar > 0 && data.totalAmountZar <= 1000000)
+        ) &&
+        (!('totalCents' in data) || (data.totalCents is int && data.totalCents > 0 && data.totalCents <= 100000000)) &&
+        (!('totalAmountZar' in data) || (data.totalAmountZar is int && data.totalAmountZar > 0 && data.totalAmountZar <= 1000000)) &&
+        (!('idempotencyKey' in data) || validString(data.idempotencyKey, 1, 160)) &&
+        data.status in [
+          'pending_fulfilment', 'packed', 'pargo_dispatched_4h', 'collected'
+        ] &&
+        validCleanString(data.pargoPickupPointCode, 1, 64);
     }
 
     function isValidDisputeTicket(data, ticketId) {
@@ -495,15 +1017,15 @@ service cloud.firestore {
         validString(data.bookingId, 1, 128) &&
         validString(data.clientId, 1, 128) &&
         validString(data.techId, 1, 128) &&
-        validString(data.portfolioPhotoUrl, 1, 500) &&
-        validString(data.techLiveCompletionPhotoUrl, 1, 500) &&
-        validString(data.clientComplaintPhotoUrl, 1, 500) &&
-        validString(data.clientReason, 1, 800) &&
+        isValidHttpsUrl(data.portfolioPhotoUrl) &&
+        isValidHttpsUrl(data.techLiveCompletionPhotoUrl) &&
+        isValidHttpsUrl(data.clientComplaintPhotoUrl) &&
+        validCleanString(data.clientReason, 1, 800) &&
         data.status in [
           'open', 'under_review',
           'resolved_refund_client', 'resolved_payout_tech', 'resolved_split'
         ] &&
-        (!('resolutionNotes' in data) || validString(data.resolutionNotes, 0, 800));
+        (!('resolutionNotes' in data) || validCleanString(data.resolutionNotes, 0, 800));
     }
 
     function isValidStaffAuditLog(data, logId) {
@@ -519,11 +1041,74 @@ service cloud.firestore {
         validString(data.id, 1, 128) &&
         data.actorId == request.auth.uid &&
         validString(data.actorId, 1, 128) &&
+        data.actorUacGroup == currentUserDoc().uacGroupId &&
         validString(data.actorUacGroup, 1, 64) &&
-        validString(data.action, 1, 120) &&
+        validCleanString(data.action, 1, 120) &&
         validString(data.targetId, 1, 128) &&
-        validString(data.timestampIso, 1, 64) &&
-        validString(data.notes, 0, 500);
+        isValidIsoString(data.timestampIso) &&
+        validCleanString(data.notes, 0, 500);
+    }
+
+    function isValidTechOnboardingApplication(data, applicationId) {
+      return hasRequiredFields([
+          'id', 'fullName', 'instagramHandle', 'email', 'phone', 'city',
+          'venueType', 'venueName', 'venueAddress', 'specialty',
+          'basePriceRangeZar', 'status', 'createdAtIso'
+        ]) &&
+        hasOnlyAllowedFields([
+          'id', 'fullName', 'instagramHandle', 'email', 'phone', 'city',
+          'venueType', 'venueName', 'venueAddress', 'specialty',
+          'basePriceRangeZar', 'status', 'createdAtIso'
+        ]) &&
+        data.id == applicationId &&
+        validString(data.id, 1, 128) &&
+        validCleanString(data.fullName, 2, 120) &&
+        validCleanString(data.instagramHandle, 1, 80) &&
+        isValidEmail(data.email) &&
+        validCleanString(data.phone, 8, 32) &&
+        isValidCity(data.city) &&
+        data.venueType in ['verified_studio', 'partner_salon_chair'] &&
+        validCleanString(data.venueName, 1, 140) &&
+        isCommercialAddressClean(data.venueName) &&
+        validCleanString(data.venueAddress, 1, 240) &&
+        isCommercialAddressClean(data.venueAddress) &&
+        validCleanString(data.specialty, 1, 140) &&
+        validCleanString(data.basePriceRangeZar, 1, 40) &&
+        data.status in ['pending_aqeelah_review', 'approved', 'rejected'] &&
+        isValidIsoString(data.createdAtIso);
+    }
+
+    function isValidSalonPartnerApplication(data, applicationId) {
+      return hasRequiredFields([
+          'id', 'salonName', 'ownerName', 'email', 'phone', 'city',
+          'suburb', 'streetAddress', 'availableChairs', 'quietDaysWindow',
+          'suggestedChairFeeZar', 'status', 'createdAtIso'
+        ]) &&
+        hasOnlyAllowedFields([
+          'id', 'salonName', 'ownerName', 'email', 'phone', 'city',
+          'suburb', 'streetAddress', 'availableChairs', 'quietDaysWindow',
+          'suggestedChairFeeZar', 'status', 'createdAtIso'
+        ]) &&
+        data.id == applicationId &&
+        validString(data.id, 1, 128) &&
+        validCleanString(data.salonName, 1, 140) &&
+        isCommercialAddressClean(data.salonName) &&
+        validCleanString(data.ownerName, 2, 120) &&
+        isValidEmail(data.email) &&
+        validCleanString(data.phone, 8, 32) &&
+        isValidCity(data.city) &&
+        validCleanString(data.suburb, 1, 100) &&
+        validCleanString(data.streetAddress, 1, 240) &&
+        isCommercialAddressClean(data.streetAddress) &&
+        data.availableChairs is int &&
+        data.availableChairs >= 1 &&
+        data.availableChairs <= 50 &&
+        validCleanString(data.quietDaysWindow, 1, 120) &&
+        data.suggestedChairFeeZar is int &&
+        data.suggestedChairFeeZar >= 0 &&
+        data.suggestedChairFeeZar <= 50000 &&
+        data.status in ['pending_verification', 'approved', 'rejected'] &&
+        isValidIsoString(data.createdAtIso);
     }
 
     // ===============================================================
@@ -566,9 +1151,18 @@ service cloud.firestore {
     }
 
     match /uac_groups/{groupId} {
-      allow read: if isActiveUser();
-      allow create, update: if hasPermission('uac.manage_roles') &&
+      // Active staff can inspect UAC group definitions; active non-staff users may only read their own group.
+      allow read: if isActiveStaff() ||
+        (isActiveUser() && groupId == currentUserDoc().uacGroupId);
+      // Fail-closed: requires active staff status AND explicit uac.manage_roles permission.
+      allow create: if isActiveStaff() &&
+        hasPermission('uac.manage_roles') &&
         isValidUacGroup(request.resource.data, groupId);
+      allow update: if isActiveStaff() &&
+        hasPermission('uac.manage_roles') &&
+        isValidUacGroup(request.resource.data, groupId) &&
+        areImmutableFieldsUnchanged(['id']) &&
+        (groupId != 'super_admin' || request.resource.data.isActive == true);
       allow delete: if false;
     }
 
@@ -638,6 +1232,7 @@ service cloud.firestore {
       );
 
       // Only users with techs.approve can set or modify isVerified.
+      // Once verified, city and type cannot be altered by non-admin owners.
       allow update: if isValidCommercialVenue(request.resource.data, venueId) &&
         areImmutableFieldsUnchanged(['id', 'ownerId']) && (
           hasPermission('techs.approve') ||
@@ -645,7 +1240,85 @@ service cloud.firestore {
             isActiveUser() &&
             'ownerId' in resource.data &&
             resource.data.ownerId == request.auth.uid &&
-            areImmutableFieldsUnchanged(['isVerified'])
+            areImmutableFieldsUnchanged(['isVerified']) &&
+            (resource.data.isVerified == false || areImmutableFieldsUnchanged(['city', 'type']))
+          )
+        );
+
+      allow delete: if false;
+    }
+
+    match /salon_partners/{salonId} {
+      allow read: if isActiveUser();
+
+      // Salon partners may register their own commercial salon unverified; admins with techs.approve may verify.
+      allow create: if isValidSalonPartner(request.resource.data, salonId) && (
+        (isActiveStaff() && hasPermission('techs.approve')) ||
+        (
+          isActiveUser() &&
+          currentUserDoc().uacGroupId == 'salon_partner' &&
+          request.resource.data.ownerId == request.auth.uid &&
+          request.resource.data.isVerified == false
+        )
+      );
+
+      allow update: if isValidSalonPartner(request.resource.data, salonId) &&
+        areImmutableFieldsUnchanged(['id', 'ownerId']) && (
+          (isActiveStaff() && hasPermission('techs.approve')) ||
+          (
+            isActiveUser() &&
+            'ownerId' in resource.data &&
+            resource.data.ownerId == request.auth.uid &&
+            areImmutableFieldsUnchanged(['isVerified']) &&
+            (resource.data.isVerified == false || areImmutableFieldsUnchanged(['city', 'venueType']))
+          )
+        );
+
+      allow delete: if false;
+    }
+
+    match /empty_chair_slots/{slotId} {
+      allow read: if isActiveUser();
+
+      // Enforces commercial venue ownership and off-peak chair slot validation.
+      allow create: if isValidEmptyChairSlot(request.resource.data, slotId) &&
+        (!('ownerId' in request.resource.data) || request.resource.data.ownerId == request.auth.uid) && (
+          (isActiveStaff() && hasPermission('techs.approve')) ||
+          (
+            isActiveUser() &&
+            currentUserDoc().uacGroupId == 'salon_partner' &&
+            (
+              (
+                exists(/databases/$(database)/documents/salon_partners/$(request.resource.data.venueId)) &&
+                get(/databases/$(database)/documents/salon_partners/$(request.resource.data.venueId)).data.ownerId == request.auth.uid
+              ) ||
+              (
+                exists(/databases/$(database)/documents/commercial_venues/$(request.resource.data.venueId)) &&
+                'ownerId' in get(/databases/$(database)/documents/commercial_venues/$(request.resource.data.venueId)).data &&
+                get(/databases/$(database)/documents/commercial_venues/$(request.resource.data.venueId)).data.ownerId == request.auth.uid
+              )
+            )
+          )
+        );
+
+      allow update: if isValidEmptyChairSlot(request.resource.data, slotId) &&
+        areImmutableFieldsUnchanged(['slotId', 'venueId', 'ownerId']) && (
+          (isActiveStaff() && hasPermission('techs.approve')) ||
+          (
+            isActiveUser() &&
+            currentUserDoc().uacGroupId == 'salon_partner' &&
+            (
+              ('ownerId' in resource.data && resource.data.ownerId == request.auth.uid) ||
+              (
+                exists(/databases/$(database)/documents/salon_partners/$(resource.data.venueId)) &&
+                get(/databases/$(database)/documents/salon_partners/$(resource.data.venueId)).data.ownerId == request.auth.uid
+              ) ||
+              (
+                exists(/databases/$(database)/documents/commercial_venues/$(resource.data.venueId)) &&
+                'ownerId' in get(/databases/$(database)/documents/commercial_venues/$(resource.data.venueId)).data &&
+                get(/databases/$(database)/documents/commercial_venues/$(resource.data.venueId)).data.ownerId == request.auth.uid
+              )
+            )
           )
         );
 
@@ -659,22 +1332,35 @@ service cloud.firestore {
     match /visual_contract_items/{itemId} {
       allow read: if isActiveUser();
 
+      // Techs cannot spoof a higher merit badge than their tech_profiles/{uid} record.
       allow create: if isValidVisualContractItem(request.resource.data, itemId) && (
+        hasPermission('techs.approve') ||
         (
           isActiveUser() &&
-          request.resource.data.techId == request.auth.uid
-        ) ||
-        hasPermission('techs.approve')
+          currentUserDoc().uacGroupId in ['tech', 'ops_admin', 'super_admin'] &&
+          request.resource.data.techId == request.auth.uid &&
+          (
+            (
+              exists(/databases/$(database)/documents/tech_profiles/$(request.auth.uid)) &&
+              request.resource.data.techTierBadge == get(/databases/$(database)/documents/tech_profiles/$(request.auth.uid)).data.tierBadge
+            ) ||
+            (
+              !exists(/databases/$(database)/documents/tech_profiles/$(request.auth.uid)) &&
+              request.resource.data.techTierBadge == 'rising'
+            )
+          )
+        )
       );
 
       allow update: if isValidVisualContractItem(request.resource.data, itemId) &&
         areImmutableFieldsUnchanged(['id', 'techId']) && (
+          hasPermission('techs.approve') ||
           (
             isActiveUser() &&
             resource.data.techId == request.auth.uid &&
-            request.resource.data.techId == request.auth.uid
-          ) ||
-          hasPermission('techs.approve')
+            request.resource.data.techId == request.auth.uid &&
+            areImmutableFieldsUnchanged(['techTierBadge'])
+          )
         );
 
       allow delete: if (isActiveUser() && resource.data.techId == request.auth.uid) ||
@@ -694,52 +1380,137 @@ service cloud.firestore {
         hasPermission('ledger.export')
       );
 
+      // Client can only create a booking in 'pending_payment' or 'confirmed' status
+      // without forged server verification flags, payment settlement fields, or completion photos.
       allow create: if isActiveUser() &&
         isValidBooking(request.resource.data, bookingId) &&
         request.resource.data.clientId == request.auth.uid &&
-        request.resource.data.status == 'confirmed';
+        request.resource.data.status in ['pending_payment', 'confirmed'] &&
+        (!('biometricVerified' in request.resource.data) || request.resource.data.biometricVerified == false) &&
+        (!('pinVerified' in request.resource.data) || request.resource.data.pinVerified == false) &&
+        !('liveCompletionPhotoUrl' in request.resource.data) &&
+        !('completionPhotoSource' in request.resource.data) &&
+        !('paymentProvider' in request.resource.data) &&
+        !('paymentReference' in request.resource.data) &&
+        !('confirmedAtIso' in request.resource.data) &&
+        !('expectedGatewayDueCents' in request.resource.data);
 
+      // Server-authoritative lock fields (biometricVerified, pinVerified), payment
+      // settlement metadata, and core contract/venue fields are strictly immutable.
+      // Valid status transitions are strictly enforced per participant role.
       allow update: if isActiveUser() &&
         isValidBooking(request.resource.data, bookingId) &&
         areImmutableFieldsUnchanged([
           'id', 'clientId', 'techId', 'visualContractItemId',
-          'venueType', 'venueId', 'city', 'totalPriceZar', 'totalDurationMinutes'
+          'venueType', 'venueId', 'verifiedStudioId', 'partnerSalonChairSlotId',
+          'city', 'totalPriceZar', 'totalDurationMinutes',
+          'selectedModifierIds', 'scheduledAtIso',
+          'biometricVerified', 'pinVerified',
+          'paymentProvider', 'paymentReference', 'confirmedAtIso',
+          'expectedGatewayDueCents', 'venueName', 'venueAddress'
         ]) && (
-          resource.data.clientId == request.auth.uid ||
-          resource.data.techId == request.auth.uid ||
-          hasPermission('disputes.resolve')
+          (
+            resource.data.clientId == request.auth.uid &&
+            areImmutableFieldsUnchanged(['liveCompletionPhotoUrl', 'completionPhotoSource']) &&
+            (
+              (resource.data.status in ['pending_payment', 'confirmed'] && request.resource.data.status == 'cancelled_by_client') ||
+              (resource.data.status == 'completed' && request.resource.data.status == 'disputed')
+            )
+          ) ||
+          (
+            resource.data.techId == request.auth.uid &&
+            (
+              (
+                resource.data.status in ['pending_payment', 'confirmed'] &&
+                request.resource.data.status == 'cancelled_by_tech' &&
+                areImmutableFieldsUnchanged(['liveCompletionPhotoUrl', 'completionPhotoSource'])
+              ) ||
+              (
+                resource.data.status == 'confirmed' &&
+                request.resource.data.status == 'in_progress' &&
+                'biometricVerified' in resource.data &&
+                resource.data.biometricVerified == true &&
+                'pinVerified' in resource.data &&
+                resource.data.pinVerified == true &&
+                areImmutableFieldsUnchanged(['liveCompletionPhotoUrl', 'completionPhotoSource'])
+              ) ||
+              (
+                resource.data.status == 'in_progress' &&
+                request.resource.data.status == 'completed' &&
+                'biometricVerified' in resource.data &&
+                resource.data.biometricVerified == true &&
+                'pinVerified' in resource.data &&
+                resource.data.pinVerified == true
+              )
+            )
+          ) ||
+          (
+            hasPermission('disputes.resolve') &&
+            areImmutableFieldsUnchanged(['liveCompletionPhotoUrl', 'completionPhotoSource']) &&
+            resource.data.status == 'disputed' &&
+            request.resource.data.status in ['disputed', 'completed', 'cancelled_by_client', 'cancelled_by_tech']
+          )
         );
 
       allow delete: if false;
     }
 
     match /booking_pins/{bookingId} {
-      // Strictly readable ONLY by the client who owns the booking; never readable by the tech.
+      // Strictly readable ONLY by the client who booked; never readable by the tech.
       allow read: if isActiveUser() && resource.data.clientId == request.auth.uid;
-      // Generated and verified exclusively via backend Cloud Functions / Admin SDK.
+      // Generated, rate-limited, and verified exclusively via backend Cloud Functions / Admin SDK.
       allow write: if false;
+    }
+
+    match /support_security_alerts/{alertId} {
+      // Readable only by active staff with disputes or UAC management permissions.
+      allow read: if isActiveStaff() && (
+        hasPermission('disputes.view') ||
+        hasPermission('disputes.resolve') ||
+        hasPermission('uac.manage_roles')
+      );
+      // Created and deleted exclusively via backend Cloud Functions / Admin SDK.
+      allow create, delete: if false;
+      // Only staff with disputes.resolve may toggle isResolved cleanly with strict field validation.
+      allow update: if hasPermission('disputes.resolve') &&
+        isValidSupportSecurityAlert(request.resource.data, alertId) &&
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['isResolved']) &&
+        areImmutableFieldsUnchanged([
+          'id', 'bookingId', 'clientId', 'techId',
+          'alertType', 'message', 'createdAtIso'
+        ]);
     }
 
     // ===============================================================
     // 6. Closed-Loop Wallet, Financial Ledger & Payouts
     // ===============================================================
 
-    match /wallets/{userId} {
-      allow read: if (isOwner(userId) && isActiveUser()) ||
+    match /wallets/{walletId} {
+      allow read: if (
+          isActiveUser() &&
+          (isOwner(walletId) || walletId == 'tech_' + request.auth.uid)
+        ) ||
+        (isActiveUser() && resource != null && (
+          ('clientId' in resource.data && resource.data.clientId == request.auth.uid) ||
+          ('techId' in resource.data && resource.data.techId == request.auth.uid)
+        )) ||
         hasPermission('ledger.export') ||
         hasPermission('wallet.credit_client');
+      // Closed-loop wallet invariant: strictly server-write-only; no client balance writes or cash withdrawal routes.
       allow write: if false;
     }
 
     match /financial_ledger/{entryId} {
       allow read: if hasPermission('ledger.export') ||
         (isActiveUser() && resource.data.userId == request.auth.uid);
+      // Immutable double-entry ledger written exclusively via backend Cloud Functions / Admin SDK.
       allow write: if false;
     }
 
     match /payouts/{payoutId} {
       allow read: if hasPermission('ledger.export') ||
         (isActiveUser() && resource.data.techId == request.auth.uid);
+      // Tech payout records are created and updated exclusively via backend Cloud Functions / Admin SDK.
       allow write: if false;
     }
 
@@ -748,34 +1519,64 @@ service cloud.firestore {
     // ===============================================================
 
     match /vouchers/{voucherId} {
-      allow read: if isActiveUser();
-      allow create, update: if hasPermission('vouchers.manage') &&
+      // Prevents promo-code enumeration: only voucher managers or the specific
+      // assigned apology-voucher recipient may read voucher documents.
+      allow read: if hasPermission('vouchers.manage') ||
+        (
+          isActiveUser() &&
+          'assignedToUserId' in resource.data &&
+          resource.data.assignedToUserId == request.auth.uid
+        );
+      allow create: if hasPermission('vouchers.manage') &&
         isValidVoucher(request.resource.data, voucherId);
+      allow update: if hasPermission('vouchers.manage') &&
+        isValidVoucher(request.resource.data, voucherId) &&
+        areImmutableFieldsUnchanged(['id']);
       allow delete: if false;
     }
 
     match /store_products/{productId} {
       allow read: if isActiveUser();
-      allow create, update: if hasPermission('store.manage_inventory') &&
+      allow create: if isActiveStaff() &&
+        hasPermission('store.manage_inventory') &&
         isValidStoreProduct(request.resource.data, productId);
+      allow update: if isActiveStaff() &&
+        hasPermission('store.manage_inventory') &&
+        isValidStoreProduct(request.resource.data, productId) &&
+        areImmutableFieldsUnchanged(['id']);
       allow delete: if false;
     }
 
     match /store_orders/{orderId} {
       allow read: if isActiveUser() && (
         resource.data.techUserId == request.auth.uid ||
-        hasPermission('store.fulfil_orders') ||
-        hasPermission('store.manage_inventory')
+        (isActiveStaff() && (
+          hasPermission('store.fulfil_orders') ||
+          hasPermission('store.manage_inventory')
+        ))
       );
 
-      allow create: if isActiveUser() &&
-        isValidStoreOrder(request.resource.data, orderId) &&
-        request.resource.data.techUserId == request.auth.uid &&
-        request.resource.data.status == 'pending_fulfilment';
+      // Created exclusively via backend Cloud Functions / Admin SDK to prevent
+      // client-side totalCents/totalAmountZar forgery or store-credit bypasses.
+      allow create: if false;
 
-      allow update: if hasPermission('store.fulfil_orders') &&
+      // Only active staff with store.fulfil_orders may advance Pargo 4-hour dispatch milestones.
+      allow update: if isActiveStaff() &&
+        hasPermission('store.fulfil_orders') &&
         isValidStoreOrder(request.resource.data, orderId) &&
-        areImmutableFieldsUnchanged(['id', 'techUserId', 'productIds', 'totalAmountZar']);
+        areImmutableFieldsUnchanged([
+          'id', 'techUserId', 'productIds',
+          'totalAmountZar', 'totalCents', 'idempotencyKey',
+          'pargoPickupPointCode'
+        ]) &&
+        (
+          (resource.data.status == 'pending_fulfilment' &&
+            request.resource.data.status in ['packed', 'pargo_dispatched_4h']) ||
+          (resource.data.status == 'packed' &&
+            request.resource.data.status in ['pargo_dispatched_4h', 'collected']) ||
+          (resource.data.status == 'pargo_dispatched_4h' &&
+            request.resource.data.status == 'collected')
+        );
 
       allow delete: if false;
     }
@@ -784,35 +1585,116 @@ service cloud.firestore {
       allow read: if isActiveUser() && (
         resource.data.clientId == request.auth.uid ||
         resource.data.techId == request.auth.uid ||
-        hasPermission('disputes.view') ||
-        hasPermission('disputes.resolve')
+        (isActiveStaff() && (
+          hasPermission('disputes.view') ||
+          hasPermission('disputes.resolve')
+        ))
       );
 
       allow create: if isActiveUser() &&
         isValidDisputeTicket(request.resource.data, ticketId) &&
         request.resource.data.clientId == request.auth.uid &&
-        request.resource.data.status == 'open';
+        request.resource.data.status == 'open' &&
+        !('resolutionNotes' in request.resource.data) &&
+        exists(/databases/$(database)/documents/bookings/$(request.resource.data.bookingId)) &&
+        get(/databases/$(database)/documents/bookings/$(request.resource.data.bookingId)).data.clientId == request.auth.uid &&
+        get(/databases/$(database)/documents/bookings/$(request.resource.data.bookingId)).data.techId == request.resource.data.techId &&
+        get(/databases/$(database)/documents/bookings/$(request.resource.data.bookingId)).data.status in ['completed', 'disputed'];
 
-      allow update: if hasPermission('disputes.resolve') &&
+      allow update: if isActiveStaff() &&
+        hasPermission('disputes.resolve') &&
         isValidDisputeTicket(request.resource.data, ticketId) &&
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'resolutionNotes']) &&
         areImmutableFieldsUnchanged([
           'id', 'bookingId', 'clientId', 'techId',
           'portfolioPhotoUrl', 'techLiveCompletionPhotoUrl',
           'clientComplaintPhotoUrl', 'clientReason'
-        ]);
+        ]) &&
+        resource.data.status in ['open', 'under_review'] &&
+        request.resource.data.status in [
+          'under_review', 'resolved_refund_client',
+          'resolved_payout_tech', 'resolved_split'
+        ];
 
       allow delete: if false;
     }
 
     match /staff_audit_logs/{logId} {
-      allow read: if hasPermission('uac.manage_roles') ||
-        hasPermission('ledger.export');
+      allow read: if isActiveStaff() && (
+        hasPermission('uac.manage_roles') ||
+        hasPermission('ledger.export')
+      );
 
       allow create: if isActiveStaff() &&
         isValidStaffAuditLog(request.resource.data, logId);
 
       // Audit logs are strictly immutable: no updates or deletions are ever permitted.
       allow update, delete: if false;
+    }
+
+    // ===============================================================
+    // 8. Stage 5: Payment Webhooks, Notifications, Onboarding & Saved Cards
+    // ===============================================================
+
+    match /processed_webhooks/{dedupeKey} {
+      // Strictly server-only idempotency ledger for Paystack, Peach Payments & PayJustNow webhooks.
+      allow read, write: if false;
+    }
+
+    match /notification_outbox/{notificationId} {
+      // Strictly server-only dispatch outbox. Protects client-only 4-digit PINs
+      // and recipient phone/email PII from any client, tech, or staff query.
+      allow read, write: if false;
+    }
+
+    match /scheduled_reminders/{reminderId} {
+      // Strictly server-only 24h & 2h reminder queue (contains recipientPhone PII).
+      allow read, write: if false;
+    }
+
+    match /tech_onboarding_applications/{applicationId} {
+      // Applicant PII is readable only by active staff with techs.approve.
+      allow read: if isActiveStaff() && hasPermission('techs.approve');
+      // Submissions must flow through the rate-limited, POPIA-checked, sanitised Cloud Function.
+      allow create, delete: if false;
+      allow update: if isActiveStaff() &&
+        hasPermission('techs.approve') &&
+        isValidTechOnboardingApplication(request.resource.data, applicationId) &&
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status']) &&
+        resource.data.status == 'pending_aqeelah_review' &&
+        request.resource.data.status in ['approved', 'rejected'];
+    }
+
+    match /salon_partner_applications/{applicationId} {
+      // Applicant PII is readable only by active staff with techs.approve.
+      allow read: if isActiveStaff() && hasPermission('techs.approve');
+      // Submissions must flow through the rate-limited, POPIA-checked, sanitised Cloud Function.
+      allow create, delete: if false;
+      allow update: if isActiveStaff() &&
+        hasPermission('techs.approve') &&
+        isValidSalonPartnerApplication(request.resource.data, applicationId) &&
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status']) &&
+        resource.data.status == 'pending_verification' &&
+        request.resource.data.status in ['approved', 'rejected'];
+    }
+
+    match /client_waitlist/{entryId} {
+      // Waitlist PII (email) and issued voucher codes are readable only by authorised staff.
+      allow read: if isActiveStaff() && (
+        hasPermission('vouchers.manage') ||
+        hasPermission('uac.manage_roles')
+      );
+      // Submissions must flow through the rate-limited, POPIA-checked, sanitised Cloud Function.
+      allow write: if false;
+    }
+
+    match /saved_card_tokens/{tokenId} {
+      // Tokenised card authorizationCode references are strictly private to the active owning client.
+      allow read: if isActiveUser() && resource.data.clientId == request.auth.uid;
+      // Tokens are created/updated exclusively via backend Cloud Functions after gateway verification.
+      allow create, update: if false;
+      // Clients may delete/unlink their own saved card token.
+      allow delete: if isActiveUser() && resource.data.clientId == request.auth.uid;
     }
 
     // ===============================================================

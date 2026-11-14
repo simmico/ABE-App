@@ -1,0 +1,57 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    function isSignedIn() {
+      return request.auth != null && request.auth.uid != null;
+    }
+
+    function isValidImageUpload(maxMb) {
+      return request.resource != null
+        && request.resource.size > 0
+        && request.resource.size <= maxMb * 1024 * 1024
+        && request.resource.contentType != null
+        && request.resource.contentType.matches('image/(jpeg|jpg|png|webp)');
+    }
+
+    // Visual Contract portfolio photos: tech uploads under own techId, public read.
+    match /visual_contracts/{techId}/{fileName} {
+      allow read: if true;
+      allow create, update: if isSignedIn()
+        && request.auth.uid == techId
+        && isValidImageUpload(10);
+      allow delete: if isSignedIn() && request.auth.uid == techId;
+    }
+
+    // Appointment Completion Lock: live camera photo only, write-once, immutable.
+    match /completions/{bookingId}/{fileName} {
+      allow read: if isSignedIn()
+        && (
+          firestore.get(/databases/(default)/documents/bookings/$(bookingId)).data.clientId == request.auth.uid
+          || firestore.get(/databases/(default)/documents/bookings/$(bookingId)).data.techId == request.auth.uid
+          || request.auth.token.admin == true
+        );
+      allow create: if isSignedIn()
+        && firestore.get(/databases/(default)/documents/bookings/$(bookingId)).data.techId == request.auth.uid
+        && request.resource.metadata != null
+        && request.resource.metadata.captureSource == 'camera'
+        && isValidImageUpload(10);
+      allow update, delete: if false;
+    }
+
+    // Tech verification / KYC documents: private to tech & admins.
+    match /kyc_documents/{techId}/{fileName} {
+      allow read: if isSignedIn()
+        && (request.auth.uid == techId || request.auth.token.admin == true);
+      allow create: if isSignedIn()
+        && request.auth.uid == techId
+        && request.resource != null
+        && request.resource.size > 0
+        && request.resource.size <= 15 * 1024 * 1024;
+      allow update, delete: if false;
+    }
+
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="abe_bg_cream">#FAF6F5</color>
+    <color name="abe_rose_primary">#C87D87</color>
+    <color name="abe_rose_dark">#A65E68</color>
+    <color name="abe_espresso">#2B2123</color>
+    <color name="abe_champagne">#B89278</color>
+</resources>

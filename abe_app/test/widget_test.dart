@@ -13,8 +13,16 @@ void main() {
       expect(find.text('Cape Town (CPT)'), findsOneWidget);
       expect(find.text('Johannesburg (JHB)'), findsOneWidget);
 
-      // Filter by Cape Town (CPT)
+      // Filter by Cape Town (CPT) and scroll first card into view
       await tester.tap(find.byKey(const Key('filter_city_CPT')));
+      await tester.pumpAndSettle();
+
+      final firstCardFinder = find.byKey(const Key('feed_card_vc_cpt_01'));
+      await tester.scrollUntilVisible(
+        find.text('Sculpted Almond BIAB & Micro French'),
+        220,
+        scrollable: find.byType(Scrollable).first,
+      );
       await tester.pumpAndSettle();
 
       expect(
@@ -23,7 +31,6 @@ void main() {
       );
 
       // Tap first Visual Contract card -> navigates to VisualContractDetailScreen
-      final firstCardFinder = find.byKey(const Key('feed_card_vc_cpt_01'));
       await tester.ensureVisible(firstCardFinder);
       await tester.pumpAndSettle();
       await tester.tap(firstCardFinder);

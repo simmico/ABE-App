@@ -544,39 +544,34 @@ class _VisualContractDetailScreenState
     final isSelected = quantity > 0;
     final isPerNail = modifier.type == BookingModifierType.perNailCount;
 
-    return Semantics(
-      button: true,
-      toggled: isSelected,
-      label:
-          '${modifier.name}, ${modifier.formattedSummary}, ${isSelected ? 'selected quantity $quantity' : 'not selected'}',
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          key: Key('modifier_row_${modifier.id}'),
-          borderRadius: BorderRadius.circular(BrandConfig.cardRadius),
-          onTap: () => _toggleModifier(modifier),
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 180),
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
+    final cardContent = Material(
+      color: Colors.transparent,
+      child: InkWell(
+        key: Key('modifier_row_${modifier.id}'),
+        borderRadius: BorderRadius.circular(BrandConfig.cardRadius),
+        onTap: () => _toggleModifier(modifier),
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 180),
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: isSelected
+                ? BrandConfig.blushSoft
+                : BrandConfig.surfaceCard,
+            borderRadius: BorderRadius.circular(BrandConfig.cardRadius),
+            border: Border.all(
               color: isSelected
-                  ? BrandConfig.blushSoft
-                  : BrandConfig.surfaceCard,
-              borderRadius: BorderRadius.circular(BrandConfig.cardRadius),
-              border: Border.all(
-                color: isSelected
-                    ? BrandConfig.rosePrimary
-                    : BrandConfig.borderWarm,
-                width: isSelected ? 1.5 : 1.0,
-              ),
+                  ? BrandConfig.roseDark
+                  : const Color(0xFFA89592),
+              width: isSelected ? 1.5 : 1.0,
             ),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
                       Row(
                         children: <Widget>[
                           Flexible(
@@ -641,7 +636,17 @@ class _VisualContractDetailScreenState
             ),
           ),
         ),
-      ),
+      );
+    if (isPerNail) {
+      return cardContent;
+    }
+    return Semantics(
+      button: true,
+      toggled: isSelected,
+      excludeSemantics: true,
+      label:
+          '${modifier.name}, ${modifier.formattedSummary}, ${isSelected ? 'selected' : 'not selected'}',
+      child: cardContent,
     );
   }
 
@@ -655,11 +660,11 @@ class _VisualContractDetailScreenState
         width: 28,
         height: 28,
         decoration: BoxDecoration(
-          color: isSelected ? BrandConfig.rosePrimary : BrandConfig.surfaceCard,
+          color: isSelected ? BrandConfig.roseDark : BrandConfig.surfaceCard,
           shape: BoxShape.circle,
           border: Border.all(
             color:
-                isSelected ? BrandConfig.rosePrimary : BrandConfig.borderWarm,
+                isSelected ? BrandConfig.roseDark : const Color(0xFFA89592),
             width: 1.5,
           ),
         ),
@@ -1040,7 +1045,7 @@ class _BreakdownRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = isHighlight ? BrandConfig.sageSuccess : BrandConfig.espresso;
+    final color = isHighlight ? const Color(0xFF3D6B55) : BrandConfig.espresso;
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[

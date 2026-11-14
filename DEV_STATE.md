@@ -5,10 +5,10 @@
 ---
 
 ## 1. Current Overall Build Status
-- **Active Stage:** Stage 2 Completed (Ready for Stage 3: `chats/CHAT_3_CALENDAR_AND_VENUE.md`)
-- **Active Chat File:** `chats/CHAT_2_BOOKING.md` (All Stage 2 sub-tasks `6.1` to `8.3` completed)
-- **Next Sub-Task to Execute:** `Sub-task 9.1` in `chats/CHAT_3_CALENDAR_AND_VENUE.md`
-- **Completed Roadmap Items (Rio's Track):** `Item 1`, `Item 2`, `Item 3`, `Item 4`, `Item 5`, `Item 6`, `Item 7`, `Item 8` (`8 / 18` completed)
+- **Active Stage:** Stage 5 Complete (`chats/CHAT_5_PAYMENTS_LAUNCH.md`)
+- **Active Chat File:** `chats/CHAT_5_PAYMENTS_LAUNCH.md` (All Stage 5 Items 16 to 18 complete; launch ready for CPT & JHB)
+- **Next Sub-Task to Execute:** None (`18 / 18` completed)
+- **Completed Roadmap Items (Rio's Track):** `Item 1` through `Item 18` (`18 / 18` completed)
 
 ---
 
@@ -51,13 +51,13 @@ All agents working in this workspace have direct access to these installed local
 - [x] **Item 6:** Booking Screen & Dynamic Modifier Calculator (`BookingModifier`, `BookingPriceQuote`, `BookingCalculatorService`, `VisualContractDetailScreen`)
 - [x] **Item 7:** Tech Portfolio Upload Flow (`TechPortfolioUploadScreen`, `VisualContractRepository`)
 - [x] **Item 8:** Stage 1 & 2 Prototype Review Refinements (`AbeApp` unified prototype navigation, `abe-design-agent` & `flutter_a11y_agent` audit refinements)
-- [ ] **Item 9:** Tech Availability Calendar & Slot Engine
-- [ ] **Item 10:** Strict Venue-Only Booking Lock (Zero House Calls)
-- [ ] **Item 11:** Grading & Tier Badge Engine
-- [ ] **Item 12:** Biometric + 4-Digit Randomised PIN Start Lock
-- [ ] **Item 13:** In-App Live Completion Camera Lock
-- [ ] **Item 14:** Closed-Loop Wallet & 75/25 Cancellation Split
-- [ ] **Item 15:** 3-Photo Dispute View & Empty Chair Salon Portal
-- [ ] **Item 16:** South African Payment Gateways (Paystack/Peach + PayJustNow)
-- [ ] **Item 17:** Full Security Audit & End-to-End QA
-- [ ] **Item 18:** Production Deployment (CPT & JHB Launch)
+- [x] **Item 9:** Tech Availability Calendar & Slot Engine (`SlotGeneratorService`, `TechCalendarSetupScreen`, `ClientSlotPickerSheet`)
+- [x] **Item 10:** Strict Venue-Only Booking Lock (Zero House Calls) (`VenueSelectionService`, `BookingVenueSelection`, `VenueConfirmationCard`, hardened `firestore.rules`)
+- [x] **Item 11:** Grading & Tier Badge Engine (`TierProgressionService`, `NailTechDashboardScreen`, `TechDashboardSnapshot`)
+- [x] **Item 12:** Biometric + 4-Digit Randomised PIN Start Lock (`AppointmentStartLockService`, `TechStartAppointmentScreen`, `firestore.rules`)
+- [x] **Item 13:** In-App Live Completion Camera Lock (`AppointmentCompletionLockService`, `OfflineEncryptedPhotoQueue`, `TechCompleteAppointmentScreen`)
+- [x] **Item 14:** Closed-Loop Wallet & 75/25 Cancellation Split (`WalletAndLedgerService`, `CouponVoucherService`, `ClientWalletScreen`, `TechEarningsScreen`)
+- [x] **Item 15:** 3-Photo Dispute View & Empty Chair Salon Portal (`MasterAdminCommandCentreScreen`, `DisputeSupportQueueScreen`, `StockUpStoreAndWarehouseScreen`, `SalonPartnerPortalScreen`)
+- [x] **Item 16:** South African Payment Gateways (Paystack/Peach + PayJustNow), Webhook & Notification Handlers (`functions/`), and CSP/XSS-Hardened Public Website + Admin Quick Profile Seeder (`public-site/`)
+- [x] **Item 17:** Full Security Audit & End-to-End QA
+- [x] **Item 18:** Production Deployment (CPT & JHB Launch)
